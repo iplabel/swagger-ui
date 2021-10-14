@@ -21,6 +21,7 @@
 
 .try-out__btn {
     margin-left: 1.25rem;
+    display:none;
 }
 
 .opblock-tag
@@ -84,6 +85,7 @@
     svg
     {
         transition: all .4s;
+        fill: #195190;
     }
 
     small
@@ -336,8 +338,9 @@
         flex: 1 1 auto;
 
         word-break: break-word;
-
+        float:left;
         @include text_body();
+
     }
 
     .opblock-summary
@@ -368,6 +371,10 @@
                 width: 18px;
                 margin: 0 5px;
             }
+        }
+        svg
+        {
+            fill: $expand-methods-svg-fill-color;
         }
     }
 
@@ -712,7 +719,7 @@
   text-align: center;
   padding: 5px;
   border-radius: 4px;
-  font-family: sans-serif;
+  font-family: "Open Sans" sans-serif;
   font-weight: 600;
   color: white;
   font-size: 14px;

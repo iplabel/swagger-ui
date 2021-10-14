@@ -65,10 +65,10 @@
     .title
     {
         font-size: 36px;
-
+        color: $ipl-color_bluegrey;
         margin: 0;
 
-        @include text_body();
+      
 
         small
         {

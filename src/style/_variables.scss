@@ -35,6 +35,8 @@ $mango-tango: #e97500 !default;
 
 // Theme
 
+// ipl txt 
+$ipl-color_bluegrey: #86A2C1 !default;
 $color-primary: #89bf04 !default;
 $color-secondary: #9012fe !default;
 $color-info: #4990e2 !default;
@@ -43,12 +45,12 @@ $color-danger: #f00 !default;
 
 $color-primary-hover: lighten($color-primary, .5%) !default;
 
-$_color-post: #49cc90 !default;
-$_color-get: #61affe !default;
-$_color-put: #fca130 !default;
-$_color-delete: #f93e3e !default;
+$_color-post: #00A3A8 !default;
+$_color-get: #195190 !default;
+$_color-put: #7D5D99!default;
+$_color-delete: #FF5C4D !default;
 $_color-head: #9012fe !default;
-$_color-patch: #50e3c2 !default;
+$_color-patch: #FDBD58 !default;
 $_color-disabled: #ebebeb !default;
 $_color-options: #0d5aa7 !default;
 
@@ -66,7 +68,7 @@ $btn-box-shadow-color: $black !default;
 $btn-authorize-background-color: transparent !default;
 $btn-authorize-border-color: $_color-post !default;
 $btn-authorize-font-color: $_color-post !default;
-$btn-authorize-svg-fill-color: $_color-post !default;
+$btn-authorize-svg-fill-color: $white !default;
 
 $btn-cancel-background-color: transparent !default;
 $btn-cancel-border-color: $color-warning !default;
@@ -77,8 +79,8 @@ $btn-execute-border-color: $color-info !default;
 $btn-execute-font-color: $white !default;
 $btn-execute-background-color-alt: $color-info !default;
 
-$expand-methods-svg-fill-color: $gray-500 !default;
-$expand-methods-svg-fill-color-hover: $gray-800 !default;
+$expand-methods-svg-fill-color: #195190 !default;
+$expand-methods-svg-fill-color-hover: #195190 !default;
 
 // Errors
 
@@ -226,4 +228,4 @@ $topbar-download-url-button-font-color: $white !default;
 
 $text-body-default-font-color: $bright-gray !default;
 $text-code-default-font-color: $bright-gray !default;
-$text-headline-default-font-color: $bright-gray !default;
+$text-headline-default-font-color: $ipl-color_bluegrey !default;
