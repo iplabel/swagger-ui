@@ -51,13 +51,14 @@
           return rq
        }
       const ui = SwaggerUIBundle({
-        url: "/file/swagger.yaml",
+        url: "/file/swagger.json",
         dom_id: '#swagger-ui',
         displayOperationId:false,
+        validatorUrl: null,
         showExtensions: true,
         withCredentials:false,
         showMutatedRequest: true,
-        syntaxHighlight:{theme:'arta'},
+        syntaxHighlight:{theme:'obsidian', activated: true, maxJsonLenght:40000},
         tryItOutEnabled: true,
         persistAuthorization: true,
         presets: [
@@ -68,7 +69,27 @@
           SwaggerUIBundle.plugins.DownloadUrl
         ],
         layout: "StandaloneLayout",
-         requestInterceptor : requestInterceptorFx
+        requestInterceptor : requestInterceptorFx,
+        requestSnippetsEnabled: true,
+             requestSnippets: {
+               generators: {
+                 "curl_bash": {
+                   title: "cURL (bash)",
+                   syntax: "bash"
+                 },
+                 "curl_powershell": {
+                   title: "cURL (PowerShell)",
+                   syntax: "powershell"
+                 },
+                 "curl_cmd": {
+                   title: "cURL (CMD)",
+                   syntax: "bash"
+                 },
+               },
+               defaultExpanded: true,
+               languages:  ["curl_bash","curl_powershell","curl_cmd"] // e.g. only show curl bash = ["curl_bash"]
+        }
+
       })
 
       window.ui = ui

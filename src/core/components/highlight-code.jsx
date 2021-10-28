@@ -13,7 +13,8 @@ export default class HighlightCode extends Component {
     downloadable: PropTypes.bool,
     fileName: PropTypes.string,
     language: PropTypes.string,
-    canCopy: PropTypes.bool
+    canCopy: PropTypes.bool,
+    forceDisable : PropTypes.bool
   }
 
   #childNodes
@@ -60,13 +61,14 @@ export default class HighlightCode extends Component {
   }
 
   render () {
-    let { value, className, downloadable, getConfigs, canCopy, language } = this.props
+    let { value, className, downloadable, getConfigs, canCopy, language,forceDisable } = this.props
 
     const config = getConfigs ? getConfigs() : {syntaxHighlight: {activated: true, theme: "agate"}}
+    if(!forceDisable) forceDisable = false
 
     className = className || ""
 
-    const codeBlock = get(config, "syntaxHighlight.activated")
+    const codeBlock = get(config, "syntaxHighlight.activated") && !forceDisable
       ? <SyntaxHighlighter
           language={language}
           className={className + " microlight"}

@@ -8,17 +8,12 @@ import { buildUrl } from "core/utils/url"
 export class InfoBasePath extends React.Component {
   static propTypes = {
     host: PropTypes.string,
-    basePath: PropTypes.string
+    basePath: PropTypes.string,
+    getConfigs: PropTypes.func.isRequired
   }
 
   render() {
-    let { host, basePath } = this.props
-
-    return (
-      <pre className="base-url">
-        [ Base URL: {host}{basePath} ]
-      </pre>
-    )
+return <pre/>
   }
 }
 

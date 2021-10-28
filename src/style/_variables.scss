@@ -75,9 +75,9 @@ $btn-cancel-border-color: $color-warning !default;
 $btn-cancel-font-color: $color-warning !default;
 
 $btn-execute-background-color: transparent !default;
-$btn-execute-border-color: $color-info !default;
+$btn-execute-border-color:  $_color-get !default;
 $btn-execute-font-color: $white !default;
-$btn-execute-background-color-alt: $color-info !default;
+$btn-execute-background-color-alt: $_color-get !default;
 
 $expand-methods-svg-fill-color: #195190 !default;
 $expand-methods-svg-fill-color-hover: #195190 !default;
