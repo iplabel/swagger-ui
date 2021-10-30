@@ -41,9 +41,26 @@
       window["SwaggerUIBundle"] = window["swagger-ui-bundle"]
       window["SwaggerUIStandalonePreset"] = window["swagger-ui-standalone-preset"]
       // Build a system
+      const requestInterceptorFx = rq => {
+        if(rq.headers.Authorization)
+            rq.headers.Authorization =`Bearer ${rq.headers.Authorization}`
+         
+        if(document.getElementById("input-clientId") && document.getElementById("input-clientId").value){
+            rq.url = `${rq.url}?clientId=${document.getElementById("input-clientId").value}`
+        }
+          return rq
+       }
       const ui = SwaggerUIBundle({
-        url: "https://petstore.swagger.io/v2/swagger.json",
+        url: "/file/swagger.json",
         dom_id: '#swagger-ui',
+        displayOperationId:false,
+        validatorUrl: null,
+        showExtensions: true,
+        withCredentials:false,
+        showMutatedRequest: true,
+        syntaxHighlight:{theme:'obsidian', activated: true, maxJsonLenght:40000},
+        tryItOutEnabled: true,
+        persistAuthorization: true,
         presets: [
           SwaggerUIBundle.presets.apis,
           SwaggerUIStandalonePreset
@@ -51,11 +68,32 @@
         plugins: [
           SwaggerUIBundle.plugins.DownloadUrl
         ],
-        layout: "StandaloneLayout"
+        layout: "StandaloneLayout",
+        requestInterceptor : requestInterceptorFx,
+        requestSnippetsEnabled: true,
+             requestSnippets: {
+               generators: {
+                 "curl_bash": {
+                   title: "cURL (bash)",
+                   syntax: "bash"
+                 },
+                 "curl_powershell": {
+                   title: "cURL (PowerShell)",
+                   syntax: "powershell"
+                 },
+                 "curl_cmd": {
+                   title: "cURL (CMD)",
+                   syntax: "bash"
+                 },
+               },
+               defaultExpanded: true,
+               languages:  ["curl_bash","curl_powershell","curl_cmd"] // e.g. only show curl bash = ["curl_bash"]
+        }
+
       })
 
       window.ui = ui
-
+      
       ui.initOAuth({
         clientId: "your-client-id",
         clientSecret: "your-client-secret-if-required",

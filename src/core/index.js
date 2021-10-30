@@ -52,6 +52,7 @@ export default function SwaggerUI(opts) {
     showExtensions: false,
     showCommonExtensions: false,
     withCredentials: undefined,
+    displayBaseUrl: false,
     requestSnippetsEnabled: false,
     requestSnippets: {
       generators: {

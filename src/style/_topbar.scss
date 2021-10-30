@@ -1,12 +1,57 @@
+$topbar-background-color_ipl: #182533 !default;
 .topbar
 {
-    padding: 10px 0;
-
-    background-color: $topbar-background-color;
+    padding: 10px 14px;
+    
+    min-width: 775px;
+    box-shadow: 0px 1px 8px 0px #888888;
+    margin: 0;
+    border: 0;
+    font-size: 100%;
+    font: inherit;
+    background-color: $topbar-background-color_ipl;
+    .input-header {
+        background-color: #3D4854;
+        border: none;
+        width: 220px;
+        height: 28px;
+        margin-top: 5px;
+        color: white;
+        transition: 0.5s;
+        border-radius: 5px;
+        padding-left: 16px;
+        -webkit-animation: 0.5s;
+        -moz-animation: 0.5s;
+        -ms-animation: 0.5s;
+        margin-right:4px;
+      }
+      .input-header:focus {
+        background-color: white;
+        color: black;
+      }
+      
+      .input-header::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
+        color: #C2D0E0;
+        opacity: 1;
+      }
+      
+      #set-token-button {
+        width: 100px;
+        height: 28px;
+        background-color: #195190;
+        border: 2px solid #195190;
+        color: white;
+        border-radius: 5px;
+      }
     .topbar-wrapper
     {
         display: flex;
-        align-items: center;
+      
+        line-height: 1;
+font-family: Droid Sans, sans-serif;
+
+margin-left: auto;
+margin-right: auto;
     }
     a
     {
@@ -17,7 +62,7 @@
         align-items: center;
         flex: 1;
 
-        max-width: 300px;
+       // max-width: 300px;
 
         text-decoration: none;
 

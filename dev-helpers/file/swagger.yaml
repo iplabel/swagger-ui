@@ -1,0 +1,4566 @@
+swagger: '2.0'
+info:
+  description: >-
+    The Ekara REST API provides a broad set of operations and resources that:
+      * Enable customisation of your Ekara Tenant including accounts and applications.
+      * Organise your application's test details including scenarios and scripts.
+      * Collect and extract measurement data.
+      * Enable manipulation of most objects in the Ekara Object Model.
+      #### <ins>**Access to the API**</ins>
+      If you have an Ekara tenant, you can access the Ekara REST API via the following endpoint: https://api.ekara.ip-label.net
+      #### <ins>**Access to the API**</ins>
+      To use the Ekara API, please add the following two items to the request headers: “accept : application/json” and “Authorization: Bearer &lt;token&gt;” for authentication.
+      #### <ins>**Access to the API**</ins>
+      <ins>All Dates should be provided in UTC<ins>
+      
+      <ins>Attention: Be careful that UTC does not cater for Daylight Saving Times. If your application is using DST, you will have to deal with it on your end.<ins>
+  version: 1.0.0
+  title: 'Welcome !'
+basePath: /
+host: 'localhost:8093'
+tags:
+  - name: Account management
+    description: Customise your Ekara Accounts.
+  - name: Test settings
+    description: Manage the application tests to be performed. 
+  - name: Client
+    description: 'Account management'
+  - name: Users
+    description: "Users management"
+  - name: Zones
+    description: "Deployment areas"
+  - name: Applications
+    description: "Application management"
+  - name: Plannings
+    description: "Schedules (Plannings) Schedule management"
+  - name: Scenarios
+    description: "Scenario management"
+  - name: Dataviz
+    description: "Dataviz"
+  - name: Enterprises
+    description: "Enterprises management"
+  - name: Config 
+    description: "Exposed Config"
+  - name: Actions
+    description: "Actions log"
+  - name: Shared data
+    description: "Shared data"
+  - name: Workspaces
+    description: "Workspaces"
+  - name: RelatedContent
+    description: "Related content of object"
+produces:
+  - application/json
+consumes:
+  - application/json
+paths:
+  '/config':
+    get:
+      tags:
+        - Config
+      summary: >-
+        Get exposed configuration
+      x-public: false
+      responses:
+        '200':
+          description: Successful operation
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/measurementQuota'
+        '400':
+          description: 'Bad request'
+        '401':
+          description: 'Authentication error'
+          schema:
+            $ref: '#/definitions/UnauthorizedResponse'
+        '403':
+          description: 'Resource forbidden (authorization error)'
+          schema:
+            $ref: '#/definitions/ForbiddenResponse'
+        '404':
+          description: 'Not found'
+        '405':
+          description: Method not allowed
+        '500':
+          description: 'Internal error'
+        'default':
+          description: 'Generic response for all errors'
+          schema:
+            $ref: '#/definitions/ReturnError'
+  '/relatedContent':
+    post:
+      tags:
+        - RelatedContent
+      summary: >-
+        Get related content of object
+      x-public: false
+      parameters:
+        - name: body
+          in: body
+          description: "Specify the asset of the object, its id and the related content needed"
+          required: true
+          schema:
+            $ref: "#/definitions/relatedContentObject"
+      responses:
+        '200':
+          description: Successful operation
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/relatedContentResponse'
+        '400':
+          description: 'Bad request'
+        '401':
+          description: 'Authentication error'
+          schema:
+            $ref: '#/definitions/UnauthorizedResponse'
+        '403':
+          description: 'Resource forbidden (authorization error)'
+          schema:
+            $ref: '#/definitions/ForbiddenResponse'
+        '404':
+          description: 'Not found'
+        '405':
+          description: Method not allowed
+        '500':
+          description: 'Internal error'
+        'default':
+          description: 'Generic response for all errors'
+          schema:
+            $ref: '#/definitions/ReturnError'
+  '/config/expireToken':
+    get:
+      tags:
+        - Config
+      summary: >-
+        Get default tokenValidityDuration
+      x-public: false
+      responses:
+        '200':
+          description: Successful operation
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/measurementQuota'
+        '400':
+          description: 'Bad request'
+        '401':
+          description: 'Authentication error'
+          schema:
+            $ref: '#/definitions/UnauthorizedResponse'
+        '403':
+          description: 'Resource forbidden (authorization error)'
+          schema:
+            $ref: '#/definitions/ForbiddenResponse'
+        '404':
+          description: 'Not found'
+        '405':
+          description: Method not allowed
+        '500':
+          description: 'Internal error'
+  '/clients':
+    post:
+      tags:
+        - Client
+      summary: 'Lists all accounts'
+      x-public: false
+      responses:
+        '200':
+          description: Successful operation
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Client1'
+        '400':
+          description: 'Bad request'
+        '401':
+          description: 'Authentication error'
+          schema:
+            $ref: '#/definitions/UnauthorizedResponse'
+        '403':
+          description: 'Resource forbidden (authorization error)'
+          schema:
+            $ref: '#/definitions/ForbiddenResponse'
+        '404':
+          description: 'Not found'
+        '405':
+          description: Method not allowed
+        '500':
+          description: 'Internal error'
+        'default':
+          description: 'Generic response for all errors'
+          schema:
+            $ref: '#/definitions/ReturnError'
+  '/client/{cliId}':
+    get:
+      tags:
+        - "Client"
+      summary: Gets an account
+      description: 'Gets linked resources for an account '
+      x-public: false
+      parameters:
+      -
+        in: path
+        name: cliId
+        type: string
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+          schema:
+            $ref: '#/definitions/GetClient'
+        '400':
+          description: 'Bad request'
+        '401':
+          description: 'Authentication error'
+          schema:
+            $ref: '#/definitions/UnauthorizedResponse'
+        '403':
+          description: 'Resource forbidden (authorization error)'
+          schema:
+            $ref: '#/definitions/ForbiddenResponse'
+        '404':
+          description: 'Not found'
+        '405':
+          description: Method not allowed
+        '500':
+          description: 'Internal error'
+        'default':
+          description: 'Generic response for all errors'
+          schema:
+            $ref: '#/definitions/ReturnError'
+    delete:
+      tags:
+        - "Client"
+      summary: 'Deletes account'
+      x-public: false
+      parameters:
+      - in: path
+        name: cliId
+        type: string
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+          schema:
+            type: object
+            properties: 
+              success:
+                type: boolean
+              message:
+                type: string
+        '400':
+          description: 'Bad request'
+        '401':
+          description: 'Authentication error'
+          schema:
+            $ref: '#/definitions/UnauthorizedResponse'
+        '403':
+          description: 'Resource forbidden (authorization error)'
+          schema:
+            $ref: '#/definitions/ForbiddenResponse'
+        '404':
+          description: 'Not found'
+        '405':
+          description: Method not allowed
+        '500':
+          description: 'Internal error'
+        'default':
+          description: 'Generic response for all errors'
+          schema:
+            $ref: '#/definitions/ReturnError'
+  '/client':
+    post:
+      tags:
+        - Client
+      summary: Creates an account
+      x-public: false
+      parameters:
+        - name: account description
+          in: body
+          description: "Creates an account and the associated user"
+          required: true
+          schema:
+            $ref: "#/definitions/CreateClient"
+      responses:
+        '200':
+          description: Successful operation
+          schema:
+            type: object
+            properties: 
+              success:
+                type: boolean
+        '400':
+          description: 'Bad request'
+        '401':
+          description: 'Authentication error'
+          schema:
+            $ref: '#/definitions/UnauthorizedResponse'
+        '403':
+          description: 'Resource forbidden (authorization error)'
+          schema:
+            $ref: '#/definitions/ForbiddenResponse'
+        '404':
+          description: 'Not found'
+        '405':
+          description: Method not allowed
+        '500':
+          description: 'Internal error'
+        'default':
+          description: 'Generic response for all errors'
+          schema:
+            $ref: '#/definitions/ReturnError'
+    patch:
+      tags:
+        - Client
+      summary: Modifies an account
+      x-public: false
+      parameters:
+        - name: body
+          in: body
+          description: "Object for modifying the account"
+          required: true
+          schema:
+            $ref: '#/definitions/ClientPatch'
+      responses:
+        '200':
+          description: Successful operation
+          schema:
+            $ref: "#/definitions/Client1"
+        '400':
+          description: 'Bad request'
+        '401':
+          description: 'Authentication error'
+          schema:
+            $ref: '#/definitions/UnauthorizedResponse'
+        '403':
+          description: 'Resource forbidden (authorization error)'
+          schema:
+            $ref: '#/definitions/ForbiddenResponse'
+        '404':
+          description: 'Not found'
+        '405':
+          description: Method not allowed
+        '500':
+          description: 'Internal error'
+        'default':
+          description: 'Generic response for all errors'
+          schema:
+            $ref: '#/definitions/ReturnError'
+  '/users':
+    post:
+      security: [] 
+      tags:
+        - Account management
+      summary: >-
+        Lists the users of all accounts
+      x-public: false
+      parameters:
+        - name: filter
+          in: body
+          description: >-
+           An optional array of filter parameters
+           - "type" attribut can be "email","userLastName", "userFirstName", "clientName"
+          required: false
+          schema:
+            type: object
+            properties:
+              clientsIds:
+                type: array
+                items:
+                  type: integer
+              filter:
+                $ref: "#/definitions/FilterRequest"
+        - name: ghostUsers
+          in: query
+          description: If value set to 1, include ghost users (default 0)
+          required: false
+          type: integer
+      responses:
+        '200':
+          description: Successful operation
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/User'
+        '400':
+          description: 'Bad request'
+        '401':
+          description: 'Authentication error'
+          schema:
+            $ref: '#/definitions/UnauthorizedResponse'
+        '403':
+          description: 'Resource forbidden (authorization error)'
+          schema:
+            $ref: '#/definitions/ForbiddenResponse'
+        '404':
+          description: 'Not found'
+        '405':
+          description: Method not allowed
+        '500':
+          description: 'Internal error'
+        'default':
+          description: 'Generic response for all errors'
+          schema:
+            $ref: '#/definitions/ReturnError'
+  '/client/users':
+    get:
+      tags:
+        - Account management
+      summary: >-
+        Lists the users of the account
+      x-public: true
+      parameters:
+        - name: ghostUsers
+          in: query
+          description: If value set to 1, include ghost users (default 0)
+          required: false
+          type: integer
+        - name: UsersRole
+          in: query
+          description: get the list of users of the account by role
+          required: false
+          type: integer
+      responses:
+        '200':
+          description: Successful operation
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/User'
+        '400':
+          description: 'Bad request'
+        '401':
+          description: 'Authentication error'
+          schema:
+            $ref: '#/definitions/UnauthorizedResponse'
+        '403':
+          description: 'Resource forbidden (authorization error)'
+          schema:
+            $ref: '#/definitions/ForbiddenResponse'
+        '404':
+          description: 'Not found'
+        '405':
+          description: Method not allowed
+        '500':
+          description: 'Internal error'
+        'default':
+          description: 'Generic response for all errors'
+          schema:
+            $ref: '#/definitions/ReturnError'
+  '/client/ghostusers':
+    get:
+      tags:
+        - Account management
+      summary: >-
+        Lists the ghost users of the account
+      x-public: false
+      responses:
+        '200':
+          description: Successful operation
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/User'
+        '400':
+          description: 'Bad request'
+        '401':
+          description: 'Authentication error'
+          schema:
+            $ref: '#/definitions/UnauthorizedResponse'
+        '403':
+          description: 'Resource forbidden (authorization error)'
+          schema:
+            $ref: '#/definitions/ForbiddenResponse'
+        '404':
+          description: 'Not found'
+        '405':
+          description: Method not allowed
+        '500':
+          description: 'Internal error'
+        'default':
+          description: 'Generic response for all errors'
+          schema:
+            $ref: '#/definitions/ReturnError'
+  "/user/":
+    post:
+      tags:
+      - "Users"
+      summary: Registers a new user
+      x-public: false
+      parameters:
+      - name: credentials
+        in: body
+        description: "User which will be created"
+        required: true
+        schema:
+          $ref: "#/definitions/UserParams"
+      responses:
+        '200':
+          description: Successful operation
+          schema:
+            type: object
+            properties: 
+              success:
+                type: boolean
+              token:
+                type: string
+        '400':
+          description: 'Bad request'
+        '401':
+          description: 'Authentication error'
+          schema:
+            $ref: '#/definitions/UnauthorizedResponse'
+        '403':
+          description: 'Resource forbidden (authorization error)'
+          schema:
+            $ref: '#/definitions/ForbiddenResponse'
+        '404':
+          description: 'Not found'
+        '405':
+          description: Method not allowed
+        '500':
+          description: 'Internal error'
+        'default':
+          description: 'Generic response for all errors'
+          schema:
+            $ref: '#/definitions/ReturnError'
+  "/user/{userId}":
+    get:
+      tags:
+      - "Users"
+      summary: Gets a user
+      x-public: false
+      parameters:
+        -
+          name: userId
+          in: path
+          description: User Id
+          required: true
+          type: integer
+      responses:
+        '200':
+          description: Successful operation
+          schema:
+            "$ref": "#/definitions/User"
+        '400':
+          description: 'Bad request'
+        '401':
+          description: 'Authentication error'
+          schema:
+            $ref: '#/definitions/UnauthorizedResponse'
+        '403':
+          description: 'Resource forbidden (authorization error)'
+          schema:
+            $ref: '#/definitions/ForbiddenResponse'
+        '404':
+          description: 'Not found'
+        '405':
+          description: Method not allowed
+        '500':
+          description: 'Internal error'
+        'default':
+          description: 'Generic response for all errors'
+          schema:
+            $ref: '#/definitions/ReturnError'
+    patch:
+      tags:
+      - "Users"
+      summary: Updates a user
+      x-public: false
+      parameters:
+        -
+          name: userId
+          in: path
+          description: User Id
+          required: true
+          type: integer
+        -
+          name: body
+          in: body
+          description: "Whole user object"
+          required: true
+          schema:
+            $ref: '#/definitions/UserParams2'
+      responses:
+        '200':
+          description: Successful operation
+          schema:
+            "$ref": "#/definitions/User"
+        '400':
+          description: 'Bad request'
+        '401':
+          description: 'Authentication error'
+          schema:
+            $ref: '#/definitions/UnauthorizedResponse'
+        '403':
+          description: 'Resource forbidden (authorization error)'
+          schema:
+            $ref: '#/definitions/ForbiddenResponse'
+        '404':
+          description: 'Not found'
+        '405':
+          description: Method not allowed
+        '500':
+          description: 'Internal error'
+        'default':
+          description: 'Generic response for all errors'
+          schema:
+            $ref: '#/definitions/ReturnError'
+    delete:
+      tags:
+      - "Users"
+      summary: Deletes a user
+      x-public: false
+      parameters:
+        -
+          name: userId
+          in: path
+          description: User Id
+          required: true
+          type: integer
+          format: int64
+      responses:
+        '200':
+          description: Successful operation
+          schema:
+            type: object
+            properties: 
+              success:
+                type: boolean
+                default: true
+              message:
+                type: string
+        '400':
+          description: 'Bad request'
+        '401':
+          description: 'Authentication error'
+          schema:
+            $ref: '#/definitions/UnauthorizedResponse'
+        '403':
+          description: 'Resource forbidden (authorization error)'
+          schema:
+            $ref: '#/definitions/ForbiddenResponse'
+        '404':
+          description: 'Not found'
+        '405':
+          description: Method not allowed
+        '500':
+          description: 'Internal error'
+        'default':
+          description: 'Generic response for all errors'
+          schema:
+            $ref: '#/definitions/ReturnError'
+  "/user/current":
+    get:
+      tags:
+      - "Users"
+      summary: Verifies the token and returns corresponding user
+      x-public: false
+      responses:
+        '200':
+          description: Successful operation
+          schema:
+            "$ref": "#/definitions/UserCurrent"
+        '400':
+          description: 'Bad request'
+        '401':
+          description: 'Authentication error'
+          schema:
+            $ref: '#/definitions/UnauthorizedResponse'
+        '403':
+          description: 'Resource forbidden (authorization error)'
+          schema:
+            $ref: '#/definitions/ForbiddenResponse'
+        '404':
+          description: 'Not found'
+        '405':
+          description: Method not allowed
+        '500':
+          description: 'Internal error'
+        'default':
+          description: 'Generic response for all errors'
+          schema:
+            $ref: '#/definitions/ReturnError'
+  "/user/roles":
+    get:
+      tags:
+        - Account management
+      summary: Lists user roles for the overall Ekara instance
+      description: Retrieves the list of the possible roles
+      x-public: true
+      responses:
+        '200':
+          description: Successful operation
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Role'
+        '400':
+          description: 'Bad request'
+        '401':
+          description: 'Authentication error'
+          schema:
+            $ref: '#/definitions/UnauthorizedResponse'
+        '403':
+          description: 'Resource forbidden (authorization error)'
+          schema:
+            $ref: '#/definitions/ForbiddenResponse'
+        '404':
+          description: 'Not found'
+        '405':
+          description: Method not allowed
+        '500':
+          description: 'Internal error'
+        'default':
+          description: 'Generic response for all errors'
+          schema:
+            $ref: '#/definitions/ReturnError'
+  "/user/rgpd_agreement":
+    patch:
+      tags:
+      - "Users"
+      summary: 'change rgpd agreement status of user'
+      x-public: false
+      parameters:
+      - name: body
+        in: body
+        description: "Object parameter"
+        required: true
+        schema:
+          $ref: "#/definitions/UserParams4"
+      responses:
+        '200':
+          description: Successful operation
+          schema:
+            type: object
+            properties: 
+              success:
+                type: boolean
+                default: true
+              rgpd:
+                type: boolean
+        '400':
+          description: 'Bad request'
+        '401':
+          description: 'Authentication error'
+          schema:
+            $ref: '#/definitions/UnauthorizedResponse'
+        '403':
+          description: 'Resource forbidden (authorization error)'
+          schema:
+            $ref: '#/definitions/ForbiddenResponse'
+        '404':
+          description: 'Not found'
+        '405':
+          description: Method not allowed
+        '500':
+          description: 'Internal error'
+        'default':
+          description: 'Generic response for all errors'
+          schema:
+            $ref: '#/definitions/ReturnError'
+  "/user/sendmail/password":
+    post:
+      tags:
+      - "Users"
+      summary: Sends an email inviting the new user to set a password
+      x-public: false
+      parameters:
+      - name: body
+        in: body
+        description: "Object parameter"
+        required: true
+        schema:
+          $ref: "#/definitions/UserParams3"
+      responses:
+        '200':
+          description: Successful operation
+          schema:
+            type: object
+            properties: 
+              success:
+                type: boolean
+                default: true
+        '400':
+          description: 'Bad request'
+        '401':
+          description: 'Authentication error'
+          schema:
+            $ref: '#/definitions/UnauthorizedResponse'
+        '403':
+          description: 'Resource forbidden (authorization error)'
+          schema:
+            $ref: '#/definitions/ForbiddenResponse'
+        '404':
+          description: 'Not found'
+        '405':
+          description: Method not allowed
+        '500':
+          description: 'Internal error'
+        'default':
+          description: 'Generic response for all errors'
+          schema:
+            $ref: '#/definitions/ReturnError'
+    patch:
+      tags:
+      - "Users"
+      summary: Sends an email to change the user's password
+      x-public: false
+      parameters:
+      - name: body
+        in: body
+        description: "Object parameter"
+        required: true
+        schema:
+          $ref: "#/definitions/UserParams4"
+      responses:
+        '200':
+          description: Successful operation
+          schema:
+            type: object
+            properties: 
+              success:
+                default: true
+        '400':
+          description: 'Bad request'
+        '401':
+          description: 'Authentication error'
+          schema:
+            $ref: '#/definitions/UnauthorizedResponse'
+        '403':
+          description: 'Resource forbidden (authorization error)'
+          schema:
+            $ref: '#/definitions/ForbiddenResponse'
+        '404':
+          description: 'Not found'
+        '405':
+          description: Method not allowed
+        '500':
+          description: 'Internal error'
+        'default':
+          description: 'Generic response for all errors'
+          schema:
+            $ref: '#/definitions/ReturnError'
+  "/zones":
+    get:
+      tags:
+      - "Zones"
+      summary: Lists the deployment area
+      x-public: false
+      responses:
+        '200':
+          description: Successful operation
+          schema:
+            "$ref": "#/definitions/Zones"
+        '400':
+          description: 'Bad request'
+        '401':
+          description: 'Authentication error'
+          schema:
+            $ref: '#/definitions/UnauthorizedResponse'
+        '403':
+          description: 'Resource forbidden (authorization error)'
+          schema:
+            $ref: '#/definitions/ForbiddenResponse'
+        '404':
+          description: 'Not found'
+        '405':
+          description: Method not allowed
+        '500':
+          description: 'Internal error'
+        'default':
+          description: 'Generic response for all errors'
+          schema:
+            $ref: '#/definitions/ReturnError'
+  "/zone":
+    post:
+      tags:
+        - "Zones"
+      summary: Creates a new deployment area
+      x-public: false
+      parameters:
+      - 
+        name: zone
+        in: body
+        description: Object describing the new deployment area
+        required: false
+        schema:
+          type: object
+          properties:
+            name:
+              type: string
+            description:
+              type: string
+            failstatuscount:
+              type: integer
+            sites:
+              type: array
+              items:
+                type: string
+      responses:
+        '200':
+          description: Successful operation
+          schema:
+            type: object
+            properties: 
+              success:
+                type: object
+                default: true
+              message:
+                type: string
+        '400':
+          description: 'Bad request'
+        '401':
+          description: 'Authentication error'
+          schema:
+            $ref: '#/definitions/UnauthorizedResponse'
+        '403':
+          description: 'Resource forbidden (authorization error)'
+          schema:
+            $ref: '#/definitions/ForbiddenResponse'
+        '404':
+          description: 'Not found'
+        '405':
+          description: Method not allowed
+        '500':
+          description: 'Internal error'
+        'default':
+          description: 'Generic response for all errors'
+          schema:
+            $ref: '#/definitions/ReturnError'
+  "/zone/{zoneId}":
+    put:
+      tags:
+      - "Zones"
+      summary: Modifies a deployment area
+      x-public: false
+      parameters:
+      -
+        in: path
+        name: zoneId
+        type: string
+        required: true
+      - 
+        name: zone
+        in: body
+        description: object describing the area to modify
+        required: false
+        schema:
+          type: object
+          properties:
+            name:
+              type: string
+            description:
+              type: string
+            failstatuscount:
+              type: integer
+            sites:
+              type: array
+              items:
+                type: string
+      responses:
+        '200':
+          description: Successful operation
+          schema:
+            type: object
+            properties: 
+              success:
+                type: object
+                default: true
+              message:
+                type: string
+        '400':
+          description: 'Bad request'
+        '401':
+          description: 'Authentication error'
+          schema:
+            $ref: '#/definitions/UnauthorizedResponse'
+        '403':
+          description: 'Resource forbidden (authorization error)'
+          schema:
+            $ref: '#/definitions/ForbiddenResponse'
+        '404':
+          description: 'Not found'
+        '405':
+          description: Method not allowed
+        '500':
+          description: 'Internal error'
+        'default':
+          description: 'Generic response for all errors'
+          schema:
+            $ref: '#/definitions/ReturnError'
+    delete:
+      tags:
+      - "Zones"
+      summary: Deletes a deployment area
+      x-public: false
+      parameters:
+      -
+        in: path
+        name: zoneId
+        type: string
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+          schema:
+            type: object
+            properties: 
+              success:
+                type: object
+                default: true
+              message:
+                type: string
+        '400':
+          description: 'Bad request'
+        '401':
+          description: 'Authentication error'
+          schema:
+            $ref: '#/definitions/UnauthorizedResponse'
+        '403':
+          description: 'Resource forbidden (authorization error)'
+          schema:
+            $ref: '#/definitions/ForbiddenResponse'
+        '404':
+          description: 'Not found'
+        '405':
+          description: Method not allowed
+        '500':
+          description: 'Internal error'
+        'default':
+          description: 'Generic response for all errors'
+          schema:
+            $ref: '#/definitions/ReturnError'
+  '/clientrestrictions':
+    get:
+      tags:
+        - Client constraints
+      summary: Client constraints for current client
+      x-public: false
+      description: ''
+      operationId: constraints
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: Successful operation
+          schema:
+            type: array
+            items: 
+              type: object
+              properties:
+                id: 
+                  type: string
+                clientId: 
+                  type: string
+                name: 
+                  type: string
+                account: 
+                  type: string
+        '400':
+          description: 'Bad Request'
+          schema:
+            $ref: '#/definitions/ReturnError'
+        '401':
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/UnauthorizedResponse'
+        '403':
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/ForbiddenResponse'
+        'default':
+          description: 'Generic response for all errors'
+          schema:
+            $ref: '#/definitions/ReturnError'
+  "/zone/{zoneId}/restrictions":
+    get:
+      tags:
+        - Zones
+      summary: List all restrictions by zone
+      description: Retrives the list of all restrictions by given zone
+      x-public: false
+      parameters:
+      -
+        in: path
+        name: zoneId
+        type: string
+        required: true
+        description: The id of the zone
+      responses:
+        '200':
+          description: Successful operation
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/RestrictionsByZone'
+        '400':
+          description: 'Bad request'
+        '401':
+          description: 'Authentication error'
+          schema:
+            $ref: '#/definitions/UnauthorizedResponse'
+        '403':
+          description: 'Resource forbidden (authorization error)'
+          schema:
+            $ref: '#/definitions/ForbiddenResponse'
+        '404':
+          description: 'Not found'
+        '405':
+          description: Method not allowed
+        '500':
+          description: 'Internal error'
+        'default':
+          description: 'Generic response for all errors'
+          schema:
+            $ref: '#/definitions/ReturnError'
+
+  '/applications':
+    get:
+      tags:
+        - Account management
+      summary: Lists all applications for the current account
+      description: Retrieves the list of all applications for current account. The response includes the ID, name and description of all applications.
+      x-public: true
+      parameters:
+      -
+        in: query
+        name: workspaceId
+        type: string
+        required: false
+        description: To filter applications by workspace
+      
+      responses:
+        '200':  
+          description: Successful operation
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Application'
+        '400':
+          description: 'Bad request'
+        '401':
+          description: 'Authentication error'
+          schema:
+            $ref: '#/definitions/UnauthorizedResponse'
+        '403':
+          description: 'Resource forbidden (authorization error)'
+          schema:
+            $ref: '#/definitions/ForbiddenResponse'
+        '404':
+          description: 'Not found'
+        '405':
+          description: Method not allowed
+        '500':
+          description: 'Internal error'
+        'default':
+          description: 'Generic response for all errors'
+          schema:
+            $ref: '#/definitions/ReturnError'
+  '/application':
+    post:
+      tags:
+      - "Applications"
+      summary: Creates a new application
+      x-public: false
+      parameters:
+        - name: application
+          in: body
+          description: object describing the new application 
+          required: true
+          schema:
+            type: object
+            properties:
+              name:
+                type: string
+              description:
+                type: string
+              workspaces:
+                type: array
+                items:
+                  type: string
+      responses:
+        '200':
+          description: Successful operation
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+              message:
+                type: string
+        '400':
+          description: 'Bad request'
+        '401':
+          description: 'Authentication error'
+          schema:
+            $ref: '#/definitions/UnauthorizedResponse'
+        '403':
+          description: 'Resource forbidden (authorization error)'
+          schema:
+            $ref: '#/definitions/ForbiddenResponse'
+        '404':
+          description: 'Not found'
+        '405':
+          description: Method not allowed
+        '500':
+          description: 'Internal error'
+        'default':
+          description: 'Generic response for all errors'
+          schema:
+            $ref: '#/definitions/ReturnError'
+  '/application/{appId}':
+    get:
+      tags:
+        - "Applications"
+      summary: 'Gets an application'
+      x-public: false
+      parameters:
+      -
+        in: path
+        name: appId
+        type: string
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+          schema:
+            $ref: '#/definitions/Application'
+        '400':
+          description: 'Bad request'
+        '401':
+          description: 'Authentication error'
+          schema:
+            $ref: '#/definitions/UnauthorizedResponse'
+        '403':
+          description: 'Resource forbidden (authorization error)'
+          schema:
+            $ref: '#/definitions/ForbiddenResponse'
+        '404':
+          description: 'Not found'
+        '405':
+          description: Method not allowed
+        '500':
+          description: 'Internal error'
+        'default':
+          description: 'Generic response for all errors'
+          schema:
+            $ref: '#/definitions/ReturnError'
+    patch:
+      tags:
+        - "Applications"
+      summary: 'Modifies an application'
+      x-public: false
+      parameters:
+      - in: path
+        name: appId
+        type: string
+        required: true
+      - name: application
+        in: body
+        description: object describing the application to be updated
+        required: false
+        schema:
+          type: object
+          properties:
+            name:
+              type: string
+            description:
+              type: string
+            workspaces:
+              type: array
+              items:
+               type: string
+      responses:
+        '200':
+          description: Successful operation
+          schema:
+            type: object
+            properties: 
+              success:
+                type: object
+                default: true
+        '400':
+          description: 'Bad request'
+        '401':
+          description: 'Authentication error'
+          schema:
+            $ref: '#/definitions/UnauthorizedResponse'
+        '403':
+          description: 'Resource forbidden (authorization error)'
+          schema:
+            $ref: '#/definitions/ForbiddenResponse'
+        '404':
+          description: 'Not found'
+        '405':
+          description: Method not allowed
+        '500':
+          description: 'Internal error'
+        'default':
+          description: 'Generic response for all errors'
+          schema:
+            $ref: '#/definitions/ReturnError'
+    delete:
+      tags:
+        - "Applications"
+      summary: 'Deletes an application'
+      x-public: false
+      parameters:
+      - in: path
+        name: appId
+        type: string
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+          schema:
+            type: object
+            properties: 
+              success:
+                type: object
+                default: true
+        '400':
+          description: 'Bad request'
+        '401':
+          description: 'Authentication error'
+          schema:
+            $ref: '#/definitions/UnauthorizedResponse'
+        '403':
+          description: 'Resource forbidden (authorization error)'
+          schema:
+            $ref: '#/definitions/ForbiddenResponse'
+        '404':
+          description: 'Not found'
+        '405':
+          description: Method not allowed
+        '500':
+          description: 'Internal error'
+        'default':
+          description: 'Generic response for all errors'
+          schema:
+            $ref: '#/definitions/ReturnError'
+  '/plannings':
+    get:
+      tags:
+        - Test settings
+      summary: Gets all schedules of the current account
+      x-public: true
+      responses:
+        '200':
+          description: Successful operation
+          schema:
+            $ref: '#/definitions/Planning'
+        '400':
+          description: 'Bad request'
+        '401':
+          description: 'Authentication error'
+          schema:
+            $ref: '#/definitions/UnauthorizedResponse'
+        '403':
+          description: 'Resource forbidden (authorization error)'
+          schema:
+            $ref: '#/definitions/ForbiddenResponse'
+        '404':
+          description: 'Not found'
+        '405':
+          description: Method not allowed
+        '500':
+          description: 'Internal error'
+        'default':
+          description: 'Generic response for all errors'
+          schema:
+            $ref: '#/definitions/ReturnError'
+  '/planning':
+    post:
+      tags:
+      - "Test settings"
+      summary: Creates a new schedule
+      description: "
+        Ekara Wiki Schedule: https://iplabel.atlassian.net/wiki/spaces/WE/pages/398295045/Creating+schedules+with+the+Ekara+API \n
+        iCalendar format example (24/7 15min):
+          ```
+          BEGIN:VCALENDARVERSION:2.0PRODID:EKARA
+          CALSCALE:GREGORIAN
+          TZID:Europe/Paris
+          X-EKA-PLANNING-NAME:Nouveau planning
+          BEGIN:VEVENT
+          DTSTAMP:20210730T134335Z
+          UID:%UUID%
+          SUMMARY:Nouvel événement
+          DTSTART;TZID=Europe/Paris:20210730T000000
+          DTEND;TZID=Europe/Paris:20210731T000000
+          RRULE:FREQ=DAILY;INTERVAL=1
+          X-EKA-PERIOD:PT15M
+          X-EKA-PERIOD-HISTORY:[{\"start\":1627596000000,\"end\":null,\"frequence\":15}]
+          X-EKA-PRIORITY:1
+          X-EKA-TYPE:MEASURMENT
+          END:VEVENT
+          END:VCALENDAR
+          ```
+        "
+      x-public: true
+      parameters:
+      -
+        in: query
+        name: duplicateFrom
+        type: string
+        required: false
+        description: ID of the schedule to be duplicated
+      - 
+        name: body
+        required: true
+        in: body
+        description: Object describing the schedule to be created
+        schema:
+          type: object
+          properties:
+            planning:
+              example: string iCal format
+              type: string
+            
+      responses:
+        '200':
+          description: Successful operation
+          schema:
+            type: object
+            properties: 
+              success:
+                type: object
+                default: true
+              message:
+                type: string
+        '400':
+          description: 'Bad request'
+        '401':
+          description: 'Authentication error'
+          schema:
+            $ref: '#/definitions/UnauthorizedResponse'
+        '403':
+          description: 'Resource forbidden (authorization error)'
+          schema:
+            $ref: '#/definitions/ForbiddenResponse'
+        '404':
+          description: 'Not found'
+        '405':
+          description: Method not allowed
+        '500':
+          description: 'Internal error'
+        'default':
+          description: 'Generic response for all errors'
+          schema:
+            $ref: '#/definitions/ReturnError'
+  '/planning/{planningId}':
+    patch:
+      tags:
+      - "Test settings"
+      summary: Modifies a schedule
+      description: "
+        If you only want to rename the schedule name, the “name” field is sufficient. 
+        If you want to add an event, you must submit the initial config otherwise we overwrite everything.
+        So you have to add the new event in the existing events. 
+        iCalendar format example:
+          ```
+          BEGIN:VCALENDARVERSION:2.0PRODID:EKARA
+          CALSCALE:GREGORIAN
+          TZID:Europe/Paris
+          X-EKA-PLANNING-NAME:Nouveau planning
+          BEGIN:VEVENT
+          DTSTAMP:20210730T134335Z
+          UID:%UUID%
+          SUMMARY:Nouvel événement
+          DTSTART;TZID=Europe/Paris:20210730T000000
+          DTEND;TZID=Europe/Paris:20210731T000000
+          RRULE:FREQ=DAILY;INTERVAL=1
+          X-EKA-PERIOD:PT15M
+          X-EKA-PERIOD-HISTORY:[{\"start\":1627596000000,\"end\":null,\"frequence\":15}]
+          X-EKA-PRIORITY:1
+          X-EKA-TYPE:MEASURMENT
+          END:VEVENT
+          END:VCALENDAR
+          ```
+      "
+      x-public: true
+      parameters:
+      -
+        in: path
+        name: planningId
+        required: true
+        type: string
+      -
+        name: body
+        in: body
+        description: Object describing the schedule to be created
+        required: false
+        schema:
+          type: object
+          properties:
+            name:
+              type: string
+            planning:
+              type: string
+              example: string (iCal format)
+      responses:
+        '200':
+          description: Successful operation
+          schema:
+            type: object
+            properties: 
+              success:
+                type: object
+                default: true
+              message:
+                type: string
+        '400':
+          description: 'Bad request'
+        '401':
+          description: 'Authentication error'
+          schema:
+            $ref: '#/definitions/UnauthorizedResponse'
+        '403':
+          description: 'Resource forbidden (authorization error)'
+          schema:
+            $ref: '#/definitions/ForbiddenResponse'
+        '404':
+          description: 'Not found'
+        '405':
+          description: Method not allowed
+        '500':
+          description: 'Internal error'
+        'default':
+          description: 'Generic response for all errors'
+          schema:
+            $ref: '#/definitions/ReturnError'
+    delete:
+      tags:
+      - "Test settings"
+      description: The schedule can only be deleted if no items are associated.
+      summary: Deletes a schedule
+      x-public: true
+      parameters:
+      -
+        in: path
+        name: planningId
+        required: true
+        type: string
+      responses:
+        '200':
+          description: Successful operation
+          schema:
+            type: object
+            properties: 
+              success:
+                type: object
+                default: true
+              message:
+                type: string
+        '400':
+          description: 'Bad request'
+        '401':
+          description: 'Authentication error'
+          schema:
+            $ref: '#/definitions/UnauthorizedResponse'
+        '403':
+          description: 'Resource forbidden (authorization error)'
+          schema:
+            $ref: '#/definitions/ForbiddenResponse'
+        '404':
+          description: 'Not found'
+        '405':
+          description: Method not allowed
+        '500':
+          description: 'Internal error'
+        'default':
+          description: 'Generic response for all errors'
+          schema:
+            $ref: '#/definitions/ReturnError'
+  '/planning/execution-avg':
+    post:
+      tags:
+        - "Plannings"
+      summary: Update all planning hourly execution average
+      x-public: false
+      parameters:
+      -
+        name: plnIds
+        in: body
+        description: Array of planning ids to update (if no planning ids update all)
+        required: true
+        schema:
+          type: array
+          items:
+            type: string
+      responses:
+        '200':
+          description: Successful operation
+          schema:
+            type: object
+            properties: 
+              success:
+                type: object
+                default: true
+        '400':
+          description: 'Bad request'
+        '401':
+          description: 'Authentication error'
+          schema:
+            $ref: '#/definitions/UnauthorizedResponse'
+        '403':
+          description: 'Resource forbidden (authorization error)'
+          schema:
+            $ref: '#/definitions/ForbiddenResponse'
+        '404':
+          description: 'Not found'
+        '405':
+          description: Method not allowed
+        '500':
+          description: 'Internal error'
+        'default':
+          description: 'Generic response for all errors'
+          schema:
+            $ref: '#/definitions/ReturnError'
+  '/scenarios':
+    post:
+      tags:
+        - Test settings
+      summary: >-
+        Gets all the scenarios of the current tenant
+      x-public: true
+      parameters:
+        - name: workspaceId
+          in: query
+          description: id of the workspace
+          required: false
+          type: string
+        - name: Filter Parameter
+          in: body
+          description: Object filter parameter
+          required: false
+          schema:
+            $ref: '#/definitions/ScenarioFilter'
+      responses:
+        '200':
+          description: Successful operation
+          schema:
+            $ref: '#/definitions/Scenario'
+        '400':
+          description: 'Bad request'
+        '401':
+          description: 'Authentication error'
+          schema:
+            $ref: '#/definitions/UnauthorizedResponse'
+        '403':
+          description: 'Resource forbidden (authorization error)'
+          schema:
+            $ref: '#/definitions/ForbiddenResponse'
+        '404':
+          description: 'Not found'
+        '405':
+          description: Method not allowed
+        '500':
+          description: 'Internal error'
+        'default':
+          description: 'Generic response for all errors'
+          schema:
+            $ref: '#/definitions/ReturnError'
+  "/scenario":
+    post:
+      tags:
+        - "Test settings"
+      summary: Creates a scenario
+      x-public: true
+      parameters:
+        - name: scenario description
+          in: body
+          description: "Scenario to be created"
+          required: true
+          schema:
+            $ref: "#/definitions/Scenario"
+      responses:
+        '200':
+          description: Successful operation
+          schema:
+            type: object
+            properties: 
+              success:
+                type: object
+                default: true
+        '400':
+          description: 'Bad request'
+        '401':
+          description: 'Authentication error'
+          schema:
+            $ref: '#/definitions/UnauthorizedResponse'
+        '403':
+          description: 'Resource forbidden (authorization error)'
+          schema:
+            $ref: '#/definitions/ForbiddenResponse'
+        '404':
+          description: 'Not found'
+        '405':
+          description: Method not allowed
+        '500':
+          description: 'Internal error'
+        'default':
+          description: 'Generic response for all errors'
+          schema:
+            $ref: '#/definitions/ReturnError'
+  "/scenario/parameter/{scenarioId}":
+    get:
+      tags:
+        - Scenarios
+      summary: Get Scenario Parameter
+      description: Returns the list of default Parameter and Parameter by site for given scenario 
+      x-public: false
+      parameters:
+        - name: scenarioId
+          in: path
+          description: ''
+          required: true
+          type: string
+      responses:
+        '200':
+          description: Successful operation
+          schema:
+            $ref: '#/definitions/ScenarioParameter'
+        '400':
+          description: 'Bad request'
+        '401':
+          description: 'Authentication error'
+          schema:
+            $ref: '#/definitions/UnauthorizedResponse'
+        '403':
+          description: 'Resource forbidden (authorization error)'
+          schema:
+            $ref: '#/definitions/ForbiddenResponse'
+        '404':
+          description: 'Not found'
+        '405':
+          description: Method not allowed
+        '500':
+          description: 'Internal error'
+        'default':
+          description: 'Generic response for all errors'
+          schema:
+            $ref: '#/definitions/ReturnError'
+    patch:
+      tags:
+        - Test settings
+      summary: Patch params for given scenario
+      description: Patch default and by site params and for given scenario
+      x-public: true
+      parameters:
+        - name: scenarioId
+          in: path
+          type: string
+          required: true
+        -
+          name: body
+          in: body
+          description: "Fields to update"
+          required: true
+          schema:
+            $ref: '#/definitions/ScenarioParamsPatch'
+      responses:
+        200:
+          description: Update Successful
+          schema:
+            type: object
+            properties: 
+              success:
+                type: boolean
+                default: true
+              message:
+                type: string
+                default: Scenario params successfuly updated
+        '400':
+          description: Bad request
+        '401':
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/UnauthorizedResponse'
+        '403':
+          description: Failed to authenticate
+          schema:
+            $ref: '#/definitions/ForbiddenResponse'
+        '405':
+          description: Method not allowed
+        'default':
+          description: 'Generic response for all errors'
+          schema:
+            $ref: '#/definitions/ReturnError'
+  "/scenario/script/{scriptId}":
+    get:
+      tags:
+        - Test settings
+      summary: Gets all scenarios associated with a user journey
+      description: Returns the list of all scenario with full scenario details for a user journey 
+      x-public: true
+      parameters:
+        - name: scriptId
+          in: path
+          description: ''
+          required: true
+          type: string
+      responses:
+        '200':
+          description: Successful operation
+          schema:
+            $ref: '#/definitions/Scenario'
+        '400':
+          description: 'Bad request'
+        '401':
+          description: 'Authentication error'
+          schema:
+            $ref: '#/definitions/UnauthorizedResponse'
+        '403':
+          description: 'Resource forbidden (authorization error)'
+          schema:
+            $ref: '#/definitions/ForbiddenResponse'
+        '404':
+          description: 'Not found'
+        '405':
+          description: Method not allowed
+        '500':
+          description: 'Internal error'
+        'default':
+          description: 'Generic response for all errors'
+          schema:
+            $ref: '#/definitions/ReturnError'
+  "/scenario/script/name/{scriptId}":
+    patch:
+      tags:
+        - Test settings
+      summary: Patch script name of all scenarios
+      description: Update the script name of the associated scenarios
+      x-public: false
+      parameters:
+        - name: scriptId
+          in: path
+          type: string
+          required: true
+        - name: body
+          in: body
+          schema:
+            type: object
+            properties:
+              name:
+                type: string
+      responses:
+        200:
+          description: Update Successful
+          schema:
+            type: object
+            properties: 
+              success:
+                type: boolean
+                default: true
+              message:
+                type: string
+                default: Script name successfuly updated
+        '400':
+          description: Bad request
+        '401':
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/UnauthorizedResponse'
+        '403':
+          description: Failed to authenticate
+          schema:
+            $ref: '#/definitions/ForbiddenResponse'
+        '405':
+          description: Method not allowed
+        'default':
+          description: 'Generic response for all errors'
+          schema:
+            $ref: '#/definitions/ReturnError'
+  "/scenario/{scenarioId}":
+    patch:
+      tags:
+      - "Test settings"
+      summary: Modifies a scenario
+      description: "Fill in only the fields you want to modify.\n Parameters type can be \n - duration \n -  text\n -  boolean\n -  numeric\n -  list"
+      x-public: true
+      parameters:
+        -
+          name: scenarioId
+          in: path
+          required: true
+          type: string
+        -
+          name: body
+          in: body
+          description: "Fields to update"
+          required: true
+          schema:
+            $ref: '#/definitions/ScenarioPatch'
+      responses:
+        '200':
+          description: Successful operation
+          schema:
+            "$ref": "#/definitions/Scenario"
+        '400':
+          description: 'Bad request'
+        '401':
+          description: 'Authentication error'
+          schema:
+            $ref: '#/definitions/UnauthorizedResponse'
+        '403':
+          description: 'Resource forbidden (authorization error)'
+          schema:
+            $ref: '#/definitions/ForbiddenResponse'
+        '404':
+          description: 'Not found'
+        '405':
+          description: Method not allowed
+        '500':
+          description: 'Internal error'
+        'default':
+          description: 'Generic response for all errors'
+          schema:
+            $ref: '#/definitions/ReturnError'
+    delete:
+      tags:
+        - "Test settings"
+      summary: 'Deletes a scenario'
+      x-public: false
+      parameters:
+      - in: path
+
+        name: scenarioId
+        type: string
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+          schema:
+            type: object
+            properties: 
+              success:
+                type: object
+                default: true
+              message:
+                type: string
+        '400':
+          description: 'Bad request'
+        '401':
+          description: 'Authentication error'
+          schema:
+            $ref: '#/definitions/UnauthorizedResponse'
+        '403':
+          description: 'Resource forbidden (authorization error)'
+          schema:
+            $ref: '#/definitions/ForbiddenResponse'
+        '404':
+          description: 'Not found'
+        '405':
+          description: Method not allowed
+        '500':
+          description: 'Internal error'
+        'default':
+          description: 'Generic response for all errors'
+          schema:
+            $ref: '#/definitions/ReturnError'
+  "/scenario/{scenarioId}/deploy":
+    patch:
+      tags:
+      - "Test settings"
+      summary: Deploys or undeploys a scenario
+      description: ""
+      x-public: true
+      parameters:
+        -
+          name: scenarioId
+          in: path
+          required: true
+          type: string
+        -
+          name: body
+          in: body
+          description: "Fields to update :\n\nSet \"active\" to 1 for deploy or 0 for undeploy.\n"
+          required: true
+          schema:
+            $ref: '#/definitions/ScenarioDeploy'
+      responses:
+        '200':
+          description: Successful operation
+          schema:
+            type: object
+            properties: 
+              success:
+                type: object
+                default: true
+              message:
+                type: string
+        '400':
+          description: 'Bad request'
+        '401':
+          description: 'Authentication error'
+          schema:
+            $ref: '#/definitions/UnauthorizedResponse'
+        '403':
+          description: 'Resource forbidden (authorization error)'
+          schema:
+            $ref: '#/definitions/ForbiddenResponse'
+        '404':
+          description: 'Not found'
+        '405':
+          description: Method not allowed
+        '500':
+          description: 'Internal error'
+        'default':
+          description: 'Generic response for all errors'
+          schema:
+            $ref: '#/definitions/ReturnError'
+  "/preferredMetrics":
+    get:
+      tags:
+        - Scenarios
+      summary: Get preferred metrics for all plugins
+      description: Returns the list of preferred metric for all plugins
+      x-public: false
+      responses:
+        '200':
+          description: Successful operation
+          schema:
+            $ref: '#/definitions/PreferredMetrics'
+        '400':
+          description: 'Bad request'
+        '401':
+          description: 'Authentication error'
+          schema:
+            $ref: '#/definitions/UnauthorizedResponse'
+        '403':
+          description: 'Resource forbidden (authorization error)'
+          schema:
+            $ref: '#/definitions/ForbiddenResponse'
+        '404':
+          description: 'Not found'
+        '405':
+          description: Method not allowed
+        '500':
+          description: 'Internal error'
+        'default':
+          description: 'Generic response for all errors'
+          schema:
+            $ref: '#/definitions/ReturnError'
+  "/dataviz/auth":
+    get:
+      tags:
+        - Dataviz
+      summary: 'Gets Dataviz Token'
+      description: ''
+      x-public: false
+      responses:
+        '200':
+          description: Successful operation
+          schema:
+            type: object
+            properties:
+              url:
+                type: string
+              token:
+                type: string
+        '400':
+          description: 'Bad request'
+        '401':
+          description: 'Authentication error'
+          schema:
+            $ref: '#/definitions/UnauthorizedResponse'
+        '403':
+          description: 'Resource forbidden (authorization error)'
+          schema:
+            $ref: '#/definitions/ForbiddenResponse'
+        '404':
+          description: 'Not found'
+        '405':
+          description: Method not allowed
+        '500':
+          description: 'Internal error'
+        'default':
+          description: 'Generic response for all errors'
+          schema:
+            $ref: '#/definitions/ReturnError'
+  "/rumbiTag/snippet":
+    get:
+      tags:
+        - Rumbi
+      summary: 'Gets Rumbi Configuration snippet'
+      description: ''
+      x-public: false
+      responses:
+        '200':
+          description: Successful operation
+          schema:
+            type: object
+            properties:
+              rumBi:
+                type: object
+                properties:
+                  tag:
+                    type: string
+                  params:
+                    type: string
+        '400':
+          description: 'Bad request'
+        '401':
+          description: 'Authentication error'
+          schema:
+            $ref: '#/definitions/UnauthorizedResponse'
+        '403':
+          description: 'Resource forbidden (authorization error)'
+          schema:
+            $ref: '#/definitions/ForbiddenResponse'
+        '404':
+          description: 'Not found'
+        '405':
+          description: Method not allowed
+        '500':
+          description: 'Internal error'
+        'default':
+          description: 'Generic response for all errors'
+          schema:
+            $ref: '#/definitions/ReturnError'
+  "/alerts":
+    get:
+      tags:
+        - Test settings
+      summary: 'Gets alerts rules of current user'
+      x-public: true
+      responses:
+        '200':
+          description: Successful operation
+          schema: 
+            $ref: '#/definitions/Alerts'
+        '400':
+          description: 'Bad request'
+        '401':
+          description: 'Authentication error'
+          schema:
+            $ref: '#/definitions/UnauthorizedResponse'
+        '403':
+          description: 'Resource forbidden (authorization error)'
+          schema:
+            $ref: '#/definitions/ForbiddenResponse'
+        '404':
+          description: 'Not found'
+        '405':
+          description: Method not allowed
+        '500':
+          description: 'Internal error'
+        'default':
+          description: 'Generic response for all errors'
+          schema:
+            $ref: '#/definitions/ReturnError'
+  "/alert":
+    post:
+      tags:
+        - Test settings
+      summary: Creates an alert rule
+      description:  "Use the sample below to create a 24/7 mail alert. \nTo configure an alert by sms, you must set the value \"notificationServiceId\" to 2\n\nIf you need to add a recipient that is not declared in Ekara, you can add a **ghostUsers** object in the alert parameter object:\n```\n  {\n      \"ghostUsers\": [\n          {\n              \"id\": \"string\",\n              \"email\": \"string\",\n              \"firstname\": \"string\", //must be the same value than \"email\" field \n              \"lastname\": \"\",\n              \"phone\": null,\n          }\n      ]\n  }\n``` "
+      x-public: true
+      parameters:
+        - name: Alert Parameters
+          in: body
+          description: "Alert Parameters"
+          required: false
+          schema:
+            "$ref": "#/definitions/AlertCreate"
+      responses:
+        '200':
+          description: Successful operation
+          schema:
+            type: object
+            properties: 
+              success:
+                type: object
+                default: true
+        '400':
+          description: 'Bad request'
+        '401':
+          description: 'Authentication error'
+          schema:
+            $ref: '#/definitions/UnauthorizedResponse'
+        '403':
+          description: 'Resource forbidden (authorization error)'
+          schema:
+            $ref: '#/definitions/ForbiddenResponse'
+        '404':
+          description: 'Not found'
+        '405':
+          description: Method not allowed
+        '500':
+          description: 'Internal error'
+        'default':
+          description: 'Generic response for all errors'
+          schema:
+            $ref: '#/definitions/ReturnError'
+  "/alert/{alertId}":
+    patch:
+      tags:
+        - Test settings
+      summary: Modifies an alert rule
+      description: "
+        The example is for an email alert 24/7.
+        For an email alert, indicate the `notificationServiceId = 2` \n
+        For an SMS alert, indicate the `notificationServiceId = 1`
+      "
+      x-public: true
+      parameters:
+        - name: alertId
+          in: path
+          description: alertId
+          required: true
+          type: string
+        - name: body
+          in: body
+          description: "Object for modifying the alert"
+          required: true
+          schema:
+            $ref: '#/definitions/AlertPatch'
+      responses:
+        '200':
+          description: Successful operation
+          schema:
+            type: object
+            properties: 
+              success:
+                type: object
+                default: true
+        '400':
+          description: 'Bad request'
+        '401':
+          description: 'Authentication error'
+          schema:
+            $ref: '#/definitions/UnauthorizedResponse'
+        '403':
+          description: 'Resource forbidden (authorization error)'
+          schema:
+            $ref: '#/definitions/ForbiddenResponse'
+        '404':
+          description: 'Not found'
+        '405':
+          description: Method not allowed
+        '500':
+          description: 'Internal error'
+        'default':
+          description: 'Generic response for all errors'
+          schema:
+            $ref: '#/definitions/ReturnError'
+    delete:
+      tags:
+        - "Test settings"
+      summary: 'Deletes an alert rule'
+      description: Only the rules not associated with a scenario can be deleted.
+      x-public: true
+      parameters:
+      - in: path
+        description: alertId
+        name: alertId
+        type: string
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+          schema:
+            type: object
+            properties: 
+              success:
+                type: object
+                default: true
+              message:
+                type: string
+        '400':
+          description: 'Bad request'
+        '401':
+          description: 'Authentication error'
+          schema:
+            $ref: '#/definitions/UnauthorizedResponse'
+        '403':
+          description: 'Resource forbidden (authorization error)'
+          schema:
+            $ref: '#/definitions/ForbiddenResponse'
+        '404':
+          description: 'Not found'
+        '405':
+          description: Method not allowed
+        '500':
+          description: 'Internal error'
+        'default':
+          description: 'Generic response for all errors'
+          schema:
+            $ref: '#/definitions/ReturnError'
+  "/alerts/triggers":
+    get:
+      tags:
+        - Alerts
+      summary: 'Gets triggers list'
+      x-public: false
+      responses:
+        '200':
+          description: Successful operation
+          schema: 
+            $ref: '#/definitions/Triggers'
+        '400':
+          description: 'Bad request'
+        '401':
+          description: 'Authentication error'
+          schema:
+            $ref: '#/definitions/UnauthorizedResponse'
+        '403':
+          description: 'Resource forbidden (authorization error)'
+          schema:
+            $ref: '#/definitions/ForbiddenResponse'
+        '404':
+          description: 'Not found'
+        '405':
+          description: Method not allowed
+        '500':
+          description: 'Internal error'
+        'default':
+          description: 'Generic response for all errors'
+          schema:
+            $ref: '#/definitions/ReturnError'
+  "/alerts/notificationServices":
+    get:
+      tags:
+        - Alerts
+      summary: 'Gets notification services list'
+      x-public: false
+      responses:
+        '200':
+          description: Successful operation
+          schema:
+            $ref: '#/definitions/NotificationServices'
+        '400':
+          description: 'Bad request'
+        '401':
+          description: 'Authentication error'
+          schema:
+            $ref: '#/definitions/UnauthorizedResponse'
+        '403':
+          description: 'Resource forbidden (authorization error)'
+          schema:
+            $ref: '#/definitions/ForbiddenResponse'
+        '404':
+          description: 'Not found'
+        '405':
+          description: Method not allowed
+        '500':
+          description: 'Internal error'
+        'default':
+          description: 'Generic response for all errors'
+          schema:
+            $ref: '#/definitions/ReturnError'
+  "/api-versions":
+    get:
+      tags:
+        - API Versions
+      summary: 'Lists API versions'
+      description: ''
+      x-public: false
+      responses:
+        '200':
+          description: Successful operation
+        '400':
+          description: 'Bad request'
+        '401':
+          description: 'Authentication error'
+          schema:
+            $ref: '#/definitions/UnauthorizedResponse'
+        '403':
+          description: 'Resource forbidden (authorization error)'
+          schema:
+            $ref: '#/definitions/ForbiddenResponse'
+        '404':
+          description: 'Not found'
+        '405':
+          description: Method not allowed
+        '500':
+          description: 'Internal error'
+        'default':
+          description: 'Generic response for all errors'
+          schema:
+            $ref: '#/definitions/ReturnError'
+  "/reports/views":
+    get:
+      tags:
+        - 'Tableau dashboards'
+      summary: 'Lists all published Tableau dashboards'
+      x-public: false
+      parameters:
+      -
+        name: restitDisplay
+        type: boolean
+        in: query
+        description: When set to TRUE, api will send only reports set to  be visible in Measure module.
+      responses:
+        '200':
+          description: Successful operation
+          schema:
+            "$ref": "#/definitions/TableauDashboard"
+        '400':
+          description: 'Bad request'
+        '401':
+          description: 'Authentication error'
+          schema:
+            $ref: '#/definitions/UnauthorizedResponse'
+        '403':
+          description: 'Resource forbidden (authorization error)'
+          schema:
+            $ref: '#/definitions/ForbiddenResponse'
+        '404':
+          description: 'Not found'
+        '405':
+          description: Method not allowed
+        '500':
+          description: 'Internal error'
+        'default':
+          description: 'Generic response for all errors'
+          schema:
+            $ref: '#/definitions/ReturnError'
+    post:
+      tags:
+        - Tableau dashboards
+      summary: 'Creates a new Tableau dashboard'
+      x-public: false
+      parameters:
+        - name: dashboard description
+          in: body
+          description: "Dashboard properties"
+          required: true
+          schema:
+            $ref: "#/definitions/CreateTableauDashboard"
+      responses:
+        '200':
+          description: Successful operation
+          schema:
+            $ref: '#/definitions/CreatedTableauDashboard'
+        '400':
+          description: 'Bad request'
+        '401':
+          description: 'Authentication error'
+          schema:
+            $ref: '#/definitions/UnauthorizedResponse'
+        '403':
+          description: 'Resource forbidden (authorization error)'
+          schema:
+            $ref: '#/definitions/ForbiddenResponse'
+        '404':
+          description: 'Not found'
+        '405':
+          description: Method not allowed
+        '500':
+          description: 'Internal error'
+        'default':
+          description: 'Generic response for all errors'
+          schema:
+            $ref: '#/definitions/ReturnError'
+    patch:
+      tags:
+        - Tableau dashboards
+      summary: 'Modifies a Tableau dashboard'
+      description: ''
+      parameters:
+        - name: dashboard description
+          in: body
+          description: "Dashboard properties"
+          required: true
+          schema:
+            $ref: "#/definitions/UpdateTableauDashboard"
+      responses:
+        '200':
+          description: Successful operation
+          schema:
+            $ref: '#/definitions/UpdatedTableauDashboard'
+        '400':
+          description: 'Bad request'
+        '401':
+          description: 'Authentication error'
+          schema:
+            $ref: '#/definitions/UnauthorizedResponse'
+        '403':
+          description: 'Resource forbidden (authorization error)'
+          schema:
+            $ref: '#/definitions/ForbiddenResponse'
+        '404':
+          description: 'Not found'
+        '405':
+          description: Method not allowed
+        '500':
+          description: 'Internal error'
+        'default':
+          description: 'Generic response for all errors'
+          schema:
+            $ref: '#/definitions/ReturnError'
+  "/reports/nativeViews":
+    get:
+      tags:
+        - 'Tableau dashboards'
+      summary: 'Lists all native dashboards'
+      x-public: false
+      responses:
+        '200':
+          description: Successful operation
+          schema:
+            "$ref": "#/definitions/NativeViews"
+        '400':
+          description: 'Bad request'
+        '401':
+          description: 'Authentication error'
+          schema:
+            $ref: '#/definitions/UnauthorizedResponse'
+        '403':
+          description: 'Resource forbidden (authorization error)'
+          schema:
+            $ref: '#/definitions/ForbiddenResponse'
+        '404':
+          description: 'Not found'
+        '405':
+          description: Method not allowed
+        '500':
+          description: 'Internal error'
+        'default':
+          description: 'Generic response for all errors'
+          schema:
+            $ref: '#/definitions/ReturnError'
+  "/reports/order/views":
+    patch:
+      tags:
+        - Tableau dashboards
+      summary: 'Modifies the order of the published Tableau dashboards'
+      x-public: false
+      description: ''
+      parameters:
+        - name: description
+          in: body
+          description: "Dashboard properties"
+          required: true
+          schema:
+            $ref: "#/definitions/UpdateOrderViewsTableauDashboard"
+      responses:
+        '200':
+          description: Successful operation
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+              message:
+                type: string
+        '400':
+          description: 'Bad request'
+        '401':
+          description: 'Authentication error'
+          schema:
+            $ref: '#/definitions/UnauthorizedResponse'
+        '403':
+          description: 'Resource forbidden (authorization error)'
+          schema:
+            $ref: '#/definitions/ForbiddenResponse'
+        '404':
+          description: 'Not found'
+        '405':
+          description: Method not allowed
+        '500':
+          description: 'Internal error'
+        'default':
+          description: 'Generic response for all errors'
+          schema:
+            $ref: '#/definitions/ReturnError'
+  "/reports/workbooks":
+    get:
+      tags:
+        - Tableau dashboards
+      summary: 'Gets Tableau workbooks'
+      responses:
+        '200':
+          description: Successful operation
+          schema:
+            "$ref": "#/definitions/Workbook"
+        '400':
+          description: 'Bad request'
+        '401':
+          description: 'Authentication error'
+          schema:
+            $ref: '#/definitions/UnauthorizedResponse'
+        '403':
+          description: 'Resource forbidden (authorization error)'
+          schema:
+            $ref: '#/definitions/ForbiddenResponse'
+        '404':
+          description: 'Not found'
+        '405':
+          description: Method not allowed
+        '500':
+          description: 'Internal error'
+        'default':
+          description: 'Generic response for all errors'
+          schema:
+            $ref: '#/definitions/ReturnError'
+  "/reports/workbooks/{workbookId}/views":
+    get:
+      tags:
+        - Tableau dashboards
+      summary: 'Gets Views of a Tableau workbook'
+      parameters:
+        - in: path
+          name: workbookId
+          type: string
+          required: true
+      responses:
+        '200':
+          description: Successful operation
+          schema:
+            "$ref": "#/definitions/Views"
+        '400':
+          description: 'Bad request'
+        '401':
+          description: 'Authentication error'
+          schema:
+            $ref: '#/definitions/UnauthorizedResponse'
+        '403':
+          description: 'Resource forbidden (authorization error)'
+          schema:
+            $ref: '#/definitions/ForbiddenResponse'
+        '404':
+          description: 'Not found'
+        '405':
+          description: Method not allowed
+        '500':
+          description: 'Internal error'
+        'default':
+          description: 'Generic response for all errors'
+          schema:
+            $ref: '#/definitions/ReturnError'
+  "/reports/views/{viewId}":
+    get:
+      tags:
+        - Tableau dashboards
+      summary: 'Gets a specific Tableau view'
+      parameters:
+        - name: viewId
+          in: path
+          required: true
+          type: string
+      responses:
+        '200':
+          description: Successful operation
+          schema:
+            $ref: '#/definitions/TableauDashboard'
+        '400':
+          description: 'Bad request'
+        '401':
+          description: 'Authentication error'
+          schema:
+            $ref: '#/definitions/UnauthorizedResponse'
+        '403':
+          description: 'Resource forbidden (authorization error)'
+          schema:
+            $ref: '#/definitions/ForbiddenResponse'
+        '404':
+          description: 'Not found'
+        '405':
+          description: Method not allowed
+        '500':
+          description: 'Internal error'
+        'default':
+          description: 'Generic response for all errors'
+          schema:
+            $ref: '#/definitions/ReturnError'
+    delete:
+      tags:
+        - Tableau dashboards
+      summary: 'Deletes a Tableau view'
+      x-public: false
+      parameters:
+      - in: path
+        name: viewId
+        type: string
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+          schema:
+            type: object
+            properties: 
+              success:
+                type: boolean
+              message:
+                type: string
+        '400':
+          description: 'Bad request'
+        '401':
+          description: 'Authentication error'
+          schema:
+            $ref: '#/definitions/UnauthorizedResponse'
+        '403':
+          description: 'Resource forbidden (authorization error)'
+          schema:
+            $ref: '#/definitions/ForbiddenResponse'
+        '404':
+          description: 'Not found'
+        '405':
+          description: Method not allowed
+        '500':
+          description: 'Internal error'
+        'default':
+          description: 'Generic response for all errors'
+          schema:
+            $ref: '#/definitions/ReturnError'
+  "/reports/trustedUrl/{siteName}":
+    get:
+      tags:
+        - Tableau dashboards
+      summary: 'Gets a trusted url to access Tableau'
+      x-public: false
+      parameters:
+        - name: siteName
+          in: path
+          description: "Tableau Site name"
+          required: true
+          type: string
+      responses:
+        '200':
+          description: Successful operation
+          schema:
+            $ref: '#/definitions/TableauTrustedUrl'
+        '400':
+          description: 'Bad request'
+        '401':
+          description: 'Authentication error'
+          schema:
+            $ref: '#/definitions/UnauthorizedResponse'
+        '403':
+          description: 'Resource forbidden (authorization error)'
+          schema:
+            $ref: '#/definitions/ForbiddenResponse'
+        '404':
+          description: 'Not found'
+        '405':
+          description: Method not allowed
+        '500':
+          description: 'Internal error'
+        'default':
+          description: 'Generic response for all errors'
+          schema:
+            $ref: '#/definitions/ReturnError'
+  "/reports/schedules":
+    get:
+      tags:
+        - Tableau dashboards
+      summary: 'Gets sll Tableau report schedules'
+      x-public: false
+      responses:
+        '200':
+          description: Successful operation
+          schema:
+            $ref: '#/definitions/ReportSchedule'
+        '400':
+          description: 'Bad request'
+        '401':
+          description: 'Authentication error'
+          schema:
+            $ref: '#/definitions/UnauthorizedResponse'
+        '403':
+          description: 'Resource forbidden (authorization error)'
+          schema:
+            $ref: '#/definitions/ForbiddenResponse'
+        '404':
+          description: 'Not found'
+        '405':
+          description: Method not allowed
+        '500':
+          description: 'Internal error'
+        'default':
+          description: 'Generic response for all errors'
+          schema:
+            $ref: '#/definitions/ReturnError'
+  "/reports/schedule":
+    post:
+      tags:
+        - Tableau dashboards
+      summary: "Creates a new Tableau report schedule"
+      x-public: false
+      parameters:
+        - name: schedule description
+          in: body
+          description: "Schedule properties"
+          required: true
+          schema:
+            $ref: "#/definitions/ReportScheduleCreate"
+      responses:
+        '200':
+          description: Successful operation
+          schema:
+            type: object
+            properties: 
+              success:
+                type: boolean
+              message:
+                type: string
+        '400':
+          description: 'Bad request'
+        '401':
+          description: 'Authentication error'
+          schema:
+            $ref: '#/definitions/UnauthorizedResponse'
+        '403':
+          description: 'Resource forbidden (authorization error)'
+          schema:
+            $ref: '#/definitions/ForbiddenResponse'
+        '404':
+          description: 'Not found'
+        '405':
+          description: Method not allowed
+        '500':
+          description: 'Internal error'
+        'default':
+          description: 'Generic response for all errors'
+          schema:
+            $ref: '#/definitions/ReturnError'
+    patch:
+      tags:
+        - 'Tableau dashboards'
+      summary: "Updates report schedule"
+      x-public: false
+      parameters:
+        - name: schedule description
+          in: body
+          description: "Reporte Schedule propreties"
+          required: true
+          schema:
+            $ref: "#/definitions/ReportScheduleUpdate"
+      responses:
+        '200':
+          description: Successful operation
+          schema:
+            type: object
+            properties: 
+              success:
+                type: boolean
+              message:
+                type: string
+        '400':
+          description: 'Bad request'
+        '401':
+          description: 'Authentication error'
+          schema:
+            $ref: '#/definitions/UnauthorizedResponse'
+        '403':
+          description: 'Resource forbidden (authorization error)'
+          schema:
+            $ref: '#/definitions/ForbiddenResponse'
+        '404':
+          description: 'Not found'
+        '405':
+          description: Method not allowed
+        '500':
+          description: 'Internal error'
+        'default':
+          description: 'Generic response for all errors'
+          schema:
+            $ref: '#/definitions/ReturnError'
+  "/reports/schedules/{scheduleId}":
+    delete:
+      tags:
+        - 'Tableau dashboards'
+      summary: "Deletes a Report Schedule"
+      x-public: false
+      parameters:
+      -
+        in: path
+        name: scheduleId
+        type: string
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+          schema:
+            type: object
+            properties: 
+              success:
+                type: object
+                default: true
+              message:
+                type: string
+        '400':
+          description: 'Bad request'
+        '401':
+          description: 'Authentication error'
+          schema:
+            $ref: '#/definitions/UnauthorizedResponse'
+        '403':
+          description: 'Resource forbidden (authorization error)'
+          schema:
+            $ref: '#/definitions/ForbiddenResponse'
+        '404':
+          description: 'Not found'
+        '405':
+          description: Method not allowed
+        '500':
+          description: 'Internal error'
+        'default':
+          description: 'Generic response for all errors'
+          schema:
+            $ref: '#/definitions/ReturnError'
+  "/sites":
+    get:
+      tags:
+        - Sites
+      summary: 'Gets sites'
+      x-public: false
+      responses:
+        '200':
+          description: Successful operation
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Site'
+        '400':
+          description: 'Bad request'
+        '401':
+          description: 'Authentication error'
+          schema:
+            $ref: '#/definitions/UnauthorizedResponse'
+        '403':
+          description: 'Resource forbidden (authorization error)'
+          schema:
+            $ref: '#/definitions/ForbiddenResponse'
+        '404':
+          description: 'Not found'
+        '405':
+          description: Method not allowed
+        '500':
+          description: 'Internal error'
+        'default':
+          description: 'Generic response for all errors'
+          schema:
+            $ref: '#/definitions/ReturnError'
+  "/enterprises":
+    get:
+      tags:
+        - Enterprises
+      summary: 'Gets Enterprises list'
+      x-public: false
+      responses:
+        '200':
+          description: Successful operation
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Enterprise'
+        '400':
+          description: 'Bad request'
+        '401':
+          description: 'Authentication error'
+          schema:
+            $ref: '#/definitions/UnauthorizedResponse'
+        '403':
+          description: 'Resource forbidden (authorization error)'
+          schema:
+            $ref: '#/definitions/ForbiddenResponse'
+        '404':
+          description: 'Not found'
+        '405':
+          description: Method not allowed
+        '500':
+          description: 'Internal error'
+        'default':
+          description: 'Generic response for all errors'
+          schema:
+            $ref: '#/definitions/ReturnError'
+  "/actions":
+    post:
+      tags:
+        - Account management
+      summary: Gets actions log
+      x-public: true
+      parameters:
+        -
+          name: startTime
+          in: query
+          description: 'start time'
+          required: true
+          type: string
+          format: date-time
+          default: '2021-02-07 23:00:00'
+        -
+          name: endTime
+          in: query
+          description: 'end time'
+          required: true
+          type: string
+          format: date-time
+          default: '2021-02-08 23:00:00'
+        -
+          name: filters
+          in: body
+          required: false
+          schema:
+            type: object
+            properties:
+              filters:
+                type: object
+                properties:
+                  type:
+                    type: array
+                    items:
+                      type: string
+                  userIds:
+                    type: array
+                    items:
+                      type: string
+                  action:
+                    type: array
+                    items:
+                      type: string
+      responses:
+        '200':
+          description: Successful operation
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/ActionLogObject'
+        '400':
+          description: 'Bad request'
+        '401':
+          description: 'Authentication error'
+          schema:
+            $ref: '#/definitions/UnauthorizedResponse'
+        '403':
+          description: 'Resource forbidden (authorization error)'
+          schema:
+            $ref: '#/definitions/ForbiddenResponse'
+        '404':
+          description: 'Not found'
+        '405':
+          description: Method not allowed
+        '500':
+          description: 'Internal error'
+        'default':
+          description: 'Generic response for all errors'
+          schema:
+            $ref: '#/definitions/ReturnError'
+  "/actions/filterdata":
+    get:
+      tags:
+        - Actions
+      summary: 'Gets data for front Filter'
+      x-public: false
+      parameters:
+        - name: startTime
+          in: query
+          description: 'Begin date'
+          type: string
+          required: true
+          format: date-time
+          default: '2021-02-07 23:00:00'
+        - name: endTime
+          in: query
+          description: 'Begin date'
+          type: string
+          required: true
+          format: date-time
+          default: '2021-02-08 23:00:00'
+      responses:
+        '200':
+          description: Successful operation
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/actionFilterData'
+        '400':
+          description: 'Bad request'
+        '401':
+          description: 'Authentication error'
+          schema:
+            $ref: '#/definitions/UnauthorizedResponse'
+        '403':
+          description: 'Resource forbidden (authorization error)'
+          schema:
+            $ref: '#/definitions/ForbiddenResponse'
+        '404':
+          description: 'Not found'
+        '405':
+          description: Method not allowed
+        '500':
+          description: 'Internal error'
+        'default':
+          description: 'Generic response for all errors'
+          schema:
+            $ref: '#/definitions/ReturnError'
+  "/shareddata":
+    get:
+      tags:
+        - Shared data
+      summary: 'Gets all Shared data'
+      x-public: false
+      responses:
+        '200':
+          description: Successful operation
+          schema:
+            $ref: '#/definitions/Shareddata'
+        '400':
+          description: 'Bad request'
+        '401':
+          description: 'Authentication error'
+          schema:
+            $ref: '#/definitions/UnauthorizedResponse'
+        '403':
+          description: 'Resource forbidden (authorization error)'
+          schema:
+            $ref: '#/definitions/ForbiddenResponse'
+        '404':
+          description: 'Not found'
+        '405':
+          description: Method not allowed
+        '500':
+          description: 'Internal error'
+        'default':
+          description: 'Generic response for all errors'
+          schema:
+            $ref: '#/definitions/ReturnError'
+    post:
+      tags:
+        - Shared data
+      summary: "Save new shared data"
+      x-public: false
+      parameters:
+        - name: sharedData
+          in: body
+          required: false
+          description: "The type must be one of 'text', 'duration', 'numeric' or 'boolean' and the value must follow the type."
+          schema:
+            type: object
+            properties:
+              sharedData:
+                type: object
+                properties:
+                  key:
+                    type: string
+                  value:
+                    type: string
+                  type:
+                    type: string
+      responses:
+        '200':
+          description: Successful operation
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/SharedDataObject'
+        '400':
+          description: 'Bad request'
+        '401':
+          description: 'Authentication error'
+          schema:
+            $ref: '#/definitions/UnauthorizedResponse'
+        '403':
+          description: 'Resource forbidden (authorization error)'
+          schema:
+            $ref: '#/definitions/ForbiddenResponse'
+        '404':
+          description: 'Not found'
+        '405':
+          description: Method not allowed
+        '500':
+          description: 'Internal error'
+        'default':
+          description: 'Generic response for all errors'
+          schema:
+            $ref: '#/definitions/ReturnError'
+  "/shareddata/{shareddataId}":
+    patch:
+      tags:
+        - Shared data
+      summary: 'update a Shared data'
+      x-public: false
+      parameters:
+        - name: shareddataId
+          in: path
+          description: shared data id
+          required: true
+          type: string
+        - name: body
+          in: body
+          description: "Object for update the shared data"
+          required: true
+          schema:
+            type: object
+            properties: 
+              name:
+                type: string
+              value:
+                type: string
+      responses:
+        '200':
+          description: Successful operation
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/SharedDataObject'
+        '400':
+          description: 'Bad request'
+        '401':
+          description: 'Authentication error'
+          schema:
+            $ref: '#/definitions/UnauthorizedResponse'
+        '403':
+          description: 'Resource forbidden (authorization error)'
+          schema:
+            $ref: '#/definitions/ForbiddenResponse'
+        '404':
+          description: 'Not found'
+        '405':
+          description: Method not allowed
+        '500':
+          description: 'Internal error'
+        'default':
+          description: 'Generic response for all errors'
+          schema:
+            $ref: '#/definitions/ReturnError'
+    delete:
+      tags:
+        - Shared data
+      summary: 'Delete a Shared data'
+      x-public: false
+      parameters:
+        - name: shareddataId
+          in: path
+          description: shared data id
+          required: true
+          type: string
+      responses:
+        '200':
+          description: Successful operation
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/SharedDataObject'
+        '400':
+          description: 'Bad request'
+        '401':
+          description: 'Authentication error'
+          schema:
+            $ref: '#/definitions/UnauthorizedResponse'
+        '403':
+          description: 'Resource forbidden (authorization error)'
+          schema:
+            $ref: '#/definitions/ForbiddenResponse'
+        '404':
+          description: 'Not found'
+        '405':
+          description: Method not allowed
+        '500':
+          description: 'Internal error'
+        'default':
+          description: 'Generic response for all errors'
+          schema:
+            $ref: '#/definitions/ReturnError'
+  "/workspaces":
+    get:
+      tags:
+        - Workspaces
+      summary: 'Gets workspaces for current client'
+      x-public: false
+      responses:
+        '200':
+          description: Successful operation
+          schema: 
+            $ref: '#/definitions/Workspaces'
+        '400':
+          description: 'Bad request'
+        '401':
+          description: 'Authentication error'
+          schema:
+            $ref: '#/definitions/UnauthorizedResponse'
+        '403':
+          description: 'Resource forbidden (authorization error)'
+          schema:
+            $ref: '#/definitions/ForbiddenResponse'
+        '404':
+          description: 'Not found'
+        '405':
+          description: Method not allowed
+        '500':
+          description: 'Internal error'
+        'default':
+          description: 'Generic response for all errors'
+          schema:
+            $ref: '#/definitions/ReturnError'
+  "/workspace":
+    post:
+      tags:
+        - Workspaces
+      summary: Create a workspace
+      x-public: false
+      parameters:
+        - name: Workspace Parameters
+          in: body
+          description: "Workspace Parameters"
+          required: false
+          schema:
+            "$ref": "#/definitions/WorkspaceCreate"
+      responses:
+        '200':
+          description: Successful operation
+          schema:
+            type: object
+            properties: 
+              success:
+                type: object
+                default: true
+              message:
+                type: string
+        '400':
+          description: 'Bad request'
+        '401':
+          description: 'Authentication error'
+          schema:
+            $ref: '#/definitions/UnauthorizedResponse'
+        '403':
+          description: 'Resource forbidden (authorization error)'
+          schema:
+            $ref: '#/definitions/ForbiddenResponse'
+        '404':
+          description: 'Not found'
+        '405':
+          description: Method not allowed
+        '500':
+          description: 'Internal error'
+        'default':
+          description: 'Generic response for all errors'
+          schema:
+            $ref: '#/definitions/ReturnError'
+  "/workspace/{id}":
+    patch:
+      tags:
+        - Workspaces
+      summary: Update a workspace
+      x-public: false
+      parameters:
+        - name: id
+          in: path
+          description: workspace Id
+          required: true
+          type: string
+        - name: body
+          in: body
+          description: "Object for modifying the workspace"
+          required: true
+          schema:
+            $ref: '#/definitions/WorkspacePatch'
+      responses:
+        '200':
+          description: Successful operation
+          schema:
+            type: object
+            properties: 
+              success:
+                type: object
+                default: true
+              message:
+                type: string
+        '400':
+          description: 'Bad request'
+        '401':
+          description: 'Authentication error'
+          schema:
+            $ref: '#/definitions/UnauthorizedResponse'
+        '403':
+          description: 'Resource forbidden (authorization error)'
+          schema:
+            $ref: '#/definitions/ForbiddenResponse'
+        '404':
+          description: 'Not found'
+        '405':
+          description: Method not allowed
+        '500':
+          description: 'Internal error'
+        'default':
+          description: 'Generic response for all errors'
+          schema:
+            $ref: '#/definitions/ReturnError'
+    delete:
+      tags:
+        - Workspaces
+      summary: delete a workspace
+      x-public: false
+      parameters:
+        - name: id
+          in: path
+          description: workspace Id
+          required: true
+          type: string
+      responses:
+        '200':
+          description: Successful operation
+          schema:
+            type: object
+            properties: 
+              success:
+                type: object
+                default: true
+              message:
+                type: string
+        '400':
+          description: 'Bad request'
+        '401':
+          description: 'Authentication error'
+          schema:
+            $ref: '#/definitions/UnauthorizedResponse'
+        '403':
+          description: 'Resource forbidden (authorization error)'
+          schema:
+            $ref: '#/definitions/ForbiddenResponse'
+        '404':
+          description: 'Not found'
+        '405':
+          description: Method not allowed
+        '500':
+          description: 'Internal error'
+        'default':
+          description: 'Generic response for all errors'
+          schema:
+            $ref: '#/definitions/ReturnError'
+securityDefinitions:
+  api_key:
+    type: apiKey
+    name: Authorization
+    in: header
+    description: Requests should pass an Ekara Token.
+
+security: 
+ - api_key: []
+definitions:
+  FilterRequest:
+    type: "array"
+    items:
+      type: "object"
+      properties:
+        type:
+          type: "string"
+        items:
+          type: "array"
+          items:
+            type: "string"
+  ScenarioParamsPatch:
+    type: object
+    properties:
+      defaultParams:
+        type: array
+        items:
+          type: object
+          properties:
+            Value: 
+              type: string
+            Name:
+              type: string
+            Type:
+              type: string
+      sitesParams:
+        type: array
+        items:
+          type: object
+          properties: 
+            siteId:
+              type: string
+            params:
+              type: array
+              items:
+                type: object
+                properties:
+                  Value: 
+                    type: string
+                  Name:
+                    type: string
+                  Type:
+                    type: string
+  ScenarioParameter:
+    type: "array"
+    items:
+      type: "object"
+      properties:
+        sites:
+          type: "array"
+          items:
+            type: object
+        default:
+          type: "array"
+          items:
+            type: object
+  actionFilterData:
+    type: object
+    properties:
+      users:
+        type: array
+        items:
+          type: object
+      types:
+        type: array
+        items:
+          type: "string"
+      performedActions:
+        type: array
+        items:
+          type: "string"
+  ScenarioFilter:
+    type: object
+    properties:
+      name:
+        type: string
+      application:
+        type: string
+      zone:
+        type: string
+      applications:
+        type: array
+        items:
+          type: string
+  Client1:
+    type: object
+    required:
+      - id
+      - name
+    properties:
+      id:
+        type: integer
+      name:
+        type: string
+      email:
+        type: string
+      dateCreated:
+        type: string
+        format: date-time
+      isPartner:
+        type: boolean
+      parentId:
+        type: integer
+      parentName:
+        type: string
+      entrepriseId:
+        type: integer
+      entrepriseName:
+        type: string
+      isActif:
+        type: integer
+    xml:
+      name: Client
+  CreateClient:
+    type: object
+    required:
+      - name
+    properties:
+      name:
+        type: string
+      userFirstName: 
+        type: string
+      userLastName: 
+        type: string
+      phone:
+        $ref: '#/definitions/Phone'
+      email:
+        type: string
+      isPartner:
+        type: boolean
+      parentId:
+        type: integer
+      entrepriseId:
+        type: integer
+      isActif:
+        type: integer
+      tokenDuration:
+        type: integer
+  GetClient:
+    type: object
+    properties:
+      linked:
+        type: object
+        properties: 
+          alerts:
+            type: array
+            items:
+              type: object
+              properties:
+                id:
+                  type: "string"
+                name:
+                  type: "string"
+          applications:
+            type: array
+            items:
+              type: object
+              properties:
+                id:
+                  type: "string"
+                name:
+                  type: "string"
+          users:
+            type: array
+            items:
+              type: object
+              properties:
+                id:
+                  type: "string"
+                name:
+                  type: "string"
+          plannings:
+            type: array
+            items:
+              type: object
+              properties:
+                id:
+                  type: "string"
+                name:
+                  type: "string"
+      deleteReady: 
+        type: boolean
+      client: 
+        type: object
+        properties: 
+          id:
+            type: string
+          name:
+            type: string
+          token:
+            type: integer
+  ClientPatch:
+    type: object
+    properties:
+      name:
+        type: string
+      isPartner:
+        type: boolean
+      parentId:
+        type: integer
+      entrepriseId:
+        type: integer
+      quota:
+        type: integer
+      isActif:
+        type: integer
+      id:
+        type: string
+      tokenDuration:
+        type: integer
+  Application:
+    type: object
+    properties:
+      id:
+        type: integer
+      name:
+        type: string
+      description:
+        type: string
+    xml:
+      name: Application
+  User:
+    type: object
+    description: "User object"
+    properties:
+      id:
+        type: integer
+      email:
+        type: string
+        description: username
+      firstname:
+        type: string
+      lastname:
+        type: string
+      phone:
+        $ref: '#/definitions/Phone'
+      language:
+        type: string
+      clientId:
+        type: integer
+      clientName:
+        type: string
+      roleId:
+        type: string
+      roleName:
+        type: string
+      canAccessAllClients:
+        type: string
+      isPartner:
+        type: boolean
+      timeZone:
+        type: object
+        properties:
+          timeZoneId:
+            type: integer
+          timeZoneLabel:
+            type: string
+          timeZoneName:
+            type: string
+          timeZoneOffset:
+            type: integer
+  UserCurrent:
+    type: object
+    description: "User object"
+    properties:
+      id:
+        type: integer
+      email:
+        type: string
+        description: username
+      firstname:
+        type: string
+      lastname:
+        type: string
+      phone:
+        $ref: '#/definitions/Phone'
+      language:
+        type: string
+      clientId:
+        type: integer
+      clientName:
+        type: string
+      roleId:
+        type: string
+      roleName:
+        type: string
+      canAccessAllClients:
+        type: string
+      isPartner:
+        type: boolean
+      timeZone:
+        type: object
+        properties:
+          timeZoneId:
+            type: integer
+          timeZoneLabel:
+            type: string
+          timeZoneName:
+            type: string
+          timeZoneOffset:
+            type: integer
+      role:
+        type: array
+        items:
+          type: object
+          properties: 
+            role:
+              type: string
+            action:
+              type: string
+            ressource:
+              type: string
+  Role:
+    type: object
+    description: "Role object"
+    properties:
+      id:
+        type: string
+      label:
+        type: string
+  UserParams:
+    type: object
+    description: "User object"
+    properties:
+      email:
+        type: string
+        description: username
+      firstname:
+        type: string
+      lastname:
+        type: string
+      phone:
+        $ref: '#/definitions/Phone'
+      language:
+        type: string
+      roleId:
+        type: integer
+        default: 1
+      password:
+        type: string
+      sendMail:
+        type: boolean
+  UserParams2:
+    type: object
+    description: "User object"
+    properties:
+      email:
+        type: string
+        description: username
+      firstname:
+        type: string
+      lastname:
+        type: string
+      phone:
+        $ref: '#/definitions/Phone'
+      language:
+        type: string
+      roleId:
+        type: integer
+  UserParams3:
+    type: object
+    description: "User object"
+    properties:
+      token:
+        type: string
+      email:
+        type: string
+      password:
+        type: string
+  UserParams4:
+    type: object
+    description: "User object"
+    properties:
+      email:
+        type: string
+      password:
+        type: string
+  Phone:
+    type: object
+    properties:
+      e164:
+        type: string
+      nationalNumber:
+        type: string
+      countryCode:
+        type: string
+  Zones:
+    type: array
+    items:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        description:
+          type: string
+        failstatuscount:
+              type: integer
+        scenariosNb:
+          type: integer
+        sites:
+          type: array
+          items:
+            type: object
+            properties: 
+              id:
+                type: string
+              name:
+                type: string
+  Site:
+    type: object
+    properties:
+      siteId:
+        type: string
+      name:
+        type: string
+      isPrivate:
+        type: boolean
+  Enterprise:
+    type: object
+    properties:
+      id:
+        type: integer
+      name:
+        type: string
+  Planning:
+    type: array
+    items:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        planning:
+          type: string
+        version:
+          type: integer
+        scenarioNb:
+          type: integer
+  Scenario:
+    type: object
+    required:
+      - name
+      - scriptId
+      - applicationId
+      - planningId
+      - zoneId
+    properties:
+      active:
+        type: integer
+      alerts:
+        type: array
+        items:
+          type: object
+          properties:
+            id:
+              type: integer
+      applicationId: 
+        type: integer
+      applicationName:
+        type: string
+      applicationRestriction:
+        type: object
+        properties:
+          id:
+            type: string
+          name:
+            type: string
+      canbedeleted:
+        type: boolean
+      clientRestrictions:
+        type: array
+        items:
+          type: string
+      deviceTypesRestriction:
+        type: string
+      endDate:
+        type: string
+      id:
+        type: string
+      name:
+        type: string
+      scriptId:
+        type: string
+      parameters:
+        type: array
+        items:
+          type: object
+          properties:
+            Value: 
+              type: string
+            Name:
+              type: string
+            Type:
+              type: string
+      planningId:
+        type: string
+      plugins:
+        type: array
+        items:
+          type: object
+          properties:
+            Name:
+              type: string
+            Version:
+              type: string
+            Parameters:
+              type: array
+              items:
+                type: object
+      preferredMetric:
+        type: string
+      scriptName:
+        type: string
+      scriptVersion:
+        type: string
+      sites:
+        type: array
+        items:
+          type: object
+          properties:
+            id:
+              type: string
+            name:
+              type: string
+      startDate:
+        type: string
+      zoneId:
+        type: string
+      zoneName:
+        type: string
+  ScenarioPatch:
+    type: object
+    properties:
+      name:
+        type: string
+      scriptVersion:
+        type: string
+      applicationId:
+        type: integer
+      planningId:
+        type: string
+      zoneId:
+        type: string
+      alerts:
+        type: array
+        items:
+          type: string
+      parameters:
+        type: array
+        items:
+          type: object
+          properties:
+            Value: 
+              type: string
+            Name:
+              type: string
+            Type:
+              type: string
+  ScenarioDeploy:
+    type: object
+    properties:
+      active:
+        type: integer
+  PreferredMetrics:
+    type: array
+    items:
+      type: object
+      properties:
+        metricId:
+          type: string
+        metricName:
+          type: string
+        metricScenarioType:
+          type: string
+  Alerts:
+    type: array
+    items:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+        notificationServiceId:
+          type: integer
+        scenarioNb:
+          type: integer
+        calendar:
+          type: object
+        recipients:
+          type: array
+          items:
+            type: integer
+        triggers:
+          type: array
+          items:
+            type: string
+  AlertCreate:
+    type: object
+    properties:
+      id:
+        type: string
+      name:
+        type: string
+      description:
+        type: string
+      notificationServiceId:
+        type: string
+      calendar:
+        type: object
+      recipients:
+        type: array
+        items:
+          type: string
+      triggers:
+        type: array
+        items:
+          type: object
+          properties:
+            id: 
+              type: string
+            parameters:
+              type: string
+      ghostUsers:
+        type: array
+        items:
+          $ref: "#/definitions/GhostUserTemplate"
+  AlertPatch:
+    type: object
+    properties:
+      name:
+        type: string
+      description:
+        type: string
+      notificationServiceId:
+        type: string
+      calendar:
+        type: object
+      recipients:
+        type: array
+        items:
+          type: string
+      triggers:
+        type: array
+        items:
+          type: object
+          properties:
+            id: 
+              type: string
+            parameters:
+              type: string
+      ghostUsers:
+        type: array
+        items:
+          $ref: "#/definitions/GhostUserTemplate"
+  Triggers:
+      type: array
+      items:
+        type: object
+        properties:
+          id:
+            type: string
+          name:
+            type: string
+          desc:
+            type: string
+          parameters:
+              type: object
+  NotificationServices:
+      type: array
+      items:
+        type: object
+        properties:
+          id:
+            type: string
+          name:
+            type: string
+          desc:
+            type: string
+          recipientControls:
+            type: object
+            properties: 
+              table:
+                type: string
+              controlFields:
+                type: array
+                items:
+                  type: string
+  CreateTableauDashboard:
+    type: object
+    properties:
+      name:
+        type: string
+      workbook:
+        type: object
+        properties:
+          id:
+            type: string
+          name:
+            type: string
+          project:
+            type: string
+      dashboard:
+        type: object
+        properties:
+          id:
+            type: string
+          name:
+            type: string
+          contentUrl:
+            type: string
+          updatedAt:
+            type: string
+      showDatepicker:
+        type: boolean
+      defaultPeriode:
+        type: integer
+      width:
+        type: string
+      height:
+        type: string
+      moreParams:
+        type: string
+  UpdateTableauDashboard:
+    type: object
+    properties:
+      id:
+        type: string
+      name:
+        type: string
+      workbook:
+        type: object
+        properties:
+          id:
+            type: string
+          name:
+            type: string
+          project:
+            type: string
+      dashboard:
+        type: object
+        properties:
+          id:
+            type: string
+          name:
+            type: string
+          contentUrl:
+            type: string
+          updatedAt:
+            type: string
+      showDatepicker:
+        type: boolean
+      defaultPeriode:
+        type: integer
+      width:
+        type: string
+      height:
+        type: string
+      moreParams:
+        type: string
+  Workbook:
+    type: object
+    properties:
+      id:
+        type: string
+      name:
+        type: string
+      description:
+        type: string
+      contentUrl:
+        type: string
+  TableauDashboard:
+    type: object
+    properties:
+      id:
+        type: string
+      name:
+        type: string
+      dashboardid:
+        type: string
+      dashboardname:
+        type: string
+      workbookid:
+        type: string
+      workbookname:
+        type: string
+      showDatepicker:
+        type: boolean
+      defaultPeriode:
+        type: integer
+      width:
+        type: string
+      height:
+        type: string
+      moreParams:
+        type: string
+  CreatedTableauDashboard:
+    type: object
+    properties:
+      success:
+        type: boolean
+      id:
+        type: string
+  UpdatedTableauDashboard:
+    type: object
+    properties:
+      success:
+        type: boolean
+  UpdateOrderViewsTableauDashboard:
+    type: array
+    items:
+      type: object
+      properties:
+        id:
+          type: integer
+        order:
+         type:  integer
+  Views:
+    type: object
+    properties:
+      id:
+        type: string
+      tags:
+        type: object
+      name:
+        type: string
+      contentUrl:
+        type: string
+      createdAt:
+        type: string
+      thumbnail:
+        type: string
+      viewUrlName:
+        type: string
+  NativeViews:
+    type: object
+    properties:
+      id:
+        type: string
+      name:
+        type: string
+      NativeOrder:
+        type: integer
+      width:
+        type: string
+      height:
+        type: string
+      params:
+        type: string
+  ReportSchedule:
+    type: array
+    items:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        frequency:
+          type: integer
+        lastModified:
+          type: string
+        message:
+          type: string
+        idCreator:
+          type: string
+        content:
+          type: object
+        recipients:
+          type: object
+        type:
+          type: string
+  ReportScheduleCreate:
+    type: object
+    properties:
+      name:
+        type: string
+      frequency:
+        type: integer
+      message:
+        type: string
+      reports:
+        type: object
+      recipients:
+        type: object
+      type:
+        type: string
+      testReport:
+        type: object
+        properties:
+          recipients:
+            type: array
+            items:
+              type: string
+          send:
+            type: boolean
+  ReportScheduleUpdate:
+    type: object
+    properties:
+      id:
+        type: string
+      name:
+        type: string
+      frequency:
+        type: integer
+      message:
+        type: string
+      reports:
+        type: object
+      recipients:
+        type: object
+      testReport:
+        type: object
+        properties:
+          recipients:
+            type: array
+            items:
+              type: string
+          send:
+            type: boolean
+  TableauTrustedUrl:
+    type: object
+    properties:
+      status:
+        type: string
+      data:
+        type: string
+  measurementQuota:
+    type: object
+    properties:
+      measurementQuota:
+        type: object
+  relatedContentObject:
+    type: object
+    properties:
+      id:
+        type: string
+      asset:
+        type: string
+      relatedAssets:
+        type: array
+        items:
+          type: string
+  relatedContentResponse:
+    type: object
+    properties:
+      id:
+        type: string
+      total:
+        type: integer
+      relatedAssets:
+        type: array
+        items:
+          type: string
+  ActionLogObject:
+    type: object
+    properties:
+      timestamp:
+        type: string
+        format: date-time
+      type:
+        type: string
+      name:
+        type: string
+      action:
+        type: string
+        enum: [create, update, delete]
+      userFirstname:
+        type: string
+      userLastName:
+        type: string
+      isSupport:
+        type: string
+        enum: ["0", "1"]
+      source:
+        type: string
+        enum: [ui, api]
+  UnauthorizedResponse:
+    type: object
+    properties:
+      success:
+        type: boolean
+        default: false
+      message:
+        type: string
+  ForbiddenResponse:
+    type: object
+    properties:
+      success:
+        type: boolean
+        default: false
+      message:
+        type: string
+        default: 'The selected account ID is not linked to your account.'
+  ReturnError:
+    type: object
+    properties:
+      success:
+        type: boolean
+        default: false
+      message:
+        type: string
+  GhostUserTemplate:
+    type: object
+    properties:
+      email:
+        type: string
+        default: ''
+      phone:
+        type: string
+        default: ''
+      firstname:
+        type: string
+        default: 'must be same as email'
+      lastname:
+        type: string
+        default: ''
+      language: 
+        type: string
+        default: 'en'
+  Shareddata:
+    type: array
+    items:
+      type: object
+      properties:
+        key:
+          type: string
+        isencrypted:
+          type: boolean
+        type:
+          type: string
+        linkedscenarios:
+          type: array
+          items:
+            type: string
+  SharedDataObject:
+    type: object
+    properties:
+      success:
+        type: boolean
+        default: true
+  Workspaces:
+    type: array
+    items:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+        applications:
+          type: array
+          items:
+            type: object
+        users:
+          type: array
+          items:
+            type: string
+  WorkspaceCreate:
+    type: object
+    properties:
+      name:
+        type: string
+      description:
+        type: string
+      applications:
+        type: array
+        items:
+          type: string
+      users:
+        type: array
+        items:
+          type: string
+  WorkspacePatch:
+    type: object
+    properties:
+      name:
+        type: string
+      description:
+        type: string
+      applications:
+        type: array
+        items:
+          type: string
+      users:
+        type: array
+        items:
+          type: string
+  RestrictionsByZone:
+    type: array
+    items:
+      type: object
+      properties:
+        que_id:
+          type: string
+        clientRestrictions:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: string
+              name:
+                type: string
+        applications:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: string
+              name:
+                type: string
+        devices:
+          type: array
+          items:
+            type: object
+            properties:
+              type:
+                type: string

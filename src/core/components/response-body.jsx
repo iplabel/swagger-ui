@@ -2,6 +2,7 @@ import React from "react"
 import PropTypes from "prop-types"
 import formatXml from "xml-but-prettier"
 import toLower from "lodash/toLower"
+import get from "lodash/get"
 import { extractFileNameFromContentDispositionHeader } from "core/utils"
 import { getKnownSyntaxHighlighterLanguage } from "core/utils/jsonParse"
 import win from "core/window"
@@ -96,6 +97,7 @@ export default class ResponseBody extends React.PureComponent {
     } else if (/json/i.test(contentType)) {
       // JSON
       let language = null
+      let disableHighlight =false
       let testValueForJson = getKnownSyntaxHighlighterLanguage(content)
       if (testValueForJson) {
         language = "json"
@@ -105,8 +107,10 @@ export default class ResponseBody extends React.PureComponent {
       } catch (error) {
         body = "can't parse JSON.  Raw result:\n\n" + content
       }
-
-      bodyEl = <HighlightCode language={language} downloadable fileName={`${downloadName}.json`} value={ body } getConfigs={ getConfigs } canCopy />
+      const config = getConfigs()
+      const maxJsonLength = get(config, "syntaxHighlight.maxJsonLenght") || 100000
+      if(body.length>maxJsonLength) disableHighlight =true
+      bodyEl = <HighlightCode forceDisable={disableHighlight} language={language} downloadable fileName={`${downloadName}.json`} value={ body } getConfigs={ getConfigs } canCopy />
 
       // XML
     } else if (/xml/i.test(contentType)) {

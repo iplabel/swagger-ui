@@ -1,20 +1,25 @@
-import React, { cloneElement } from "react"
+import React from "react"
 import PropTypes from "prop-types"
 
 //import "./topbar.less"
-import Logo from "./logo_small.svg"
+import Logo from "./ic-logo-ekara-long-version-white.svg"
 import {parseSearch, serializeSearch} from "../../core/utils"
 
 export default class Topbar extends React.Component {
 
   static propTypes = {
     layoutActions: PropTypes.object.isRequired,
-    authActions: PropTypes.object.isRequired
+    definitions: PropTypes.object.isRequired,
+    getComponent: PropTypes.func.isRequired,
+    authActions: PropTypes.object.isRequired,
+    authSelectors: PropTypes.object.isRequired,
+    errSelectors: PropTypes.object.isRequired,
+    specSelectors: PropTypes.object.isRequired
   }
 
   constructor(props, context) {
     super(props, context)
-    this.state = { url: props.specSelectors.url(), selectedIndex: 0 }
+    this.state = { url: props.specSelectors.url(), selectedIndex: 0, token:null, hiddenTokenInfo:true }
   }
 
   componentWillReceiveProps(nextProps) {
@@ -43,17 +48,7 @@ export default class Topbar extends React.Component {
     this.props.specActions.download(url)
   }
 
-  onUrlSelect =(e)=> {
-    let url = e.target.value || e.target.href
-    this.loadSpec(url)
-    this.setSelectedUrl(url)
-    e.preventDefault()
-  }
 
-  downloadUrl = (e) => {
-    this.loadSpec(this.state.url)
-    e.preventDefault()
-  }
 
   setSearch = (spec) => {
     let search = parseSearch()
@@ -83,67 +78,61 @@ export default class Topbar extends React.Component {
   }
 
   componentDidMount() {
-    const configs = this.props.getConfigs()
-    const urls = configs.urls || []
+   
+  }
 
-    if(urls && urls.length) {
-      var targetIndex = this.state.selectedIndex
-      let primaryName = configs["urls.primaryName"]
-      if(primaryName)
-      {
-        urls.forEach((spec, i) => {
-          if(spec.name === primaryName)
-            {
-              this.setState({selectedIndex: i})
-              targetIndex = i
-            }
-        })
+  setToken =()=>{
+      let inputToken = document.getElementById("input-token").value
+      if(inputToken !== ""){
+        
+        this.setState({ token: inputToken,hiddenTokenInfo:false})
       }
-
-      this.loadSpec(urls[targetIndex].url)
-    }
+      if (inputToken && inputToken.trim() !== "") {
+        let {definitions,authSelectors,onAuthChange,authorized, getComponent, authActions,errSelectors} = this.props
+        inputToken = `Bearer ${inputToken}`
+       
+        const ApiKeyAuth = getComponent("apiKeyAuth")
+        
+       
+     //  let nonOauthDefinitions = definitions.filter( schema => schema.get("type") !== "oauth2")
+      //  console.log(nonOauthDefinitions)
+    //   nonOauthDefinitions.map( (schema, name) => {
+    //     return <AuthItem
+    //       key={name}
+    //       schema={schema}
+    //       name={name}
+    //       getComponent={getComponent}
+    //       onAuthChange={this.onAuthChange}
+    //       authorized={authorized}
+    //       errSelectors={errSelectors}
+    //       />
+    //   }).toArray()
+    console.log( <ApiKeyAuth schema="apiKey"
+    name="Authentification"
+    errSelectors={ errSelectors }
+    authorized={ authorized }
+    getComponent={ getComponent }
+   value={inputToken} />)
+        // authActions.authorizeWithPersistOption(
+        //     <ApiKeyAuth schema="apiKey"
+        //      name="Authentification"
+        //      errSelectors={ errSelectors }
+        //      authorized={ authorized }
+        //      getComponent={ getComponent }
+        //      onChange={ onAuthChange }
+        //     value={inputToken} />)
+        
+       
+     }
   }
-
-  onFilterChange =(e) => {
-    let {target: {value}} = e
-    this.props.layoutActions.updateFilter(value)
-  }
-
   render() {
     let { getComponent, specSelectors, getConfigs } = this.props
     const Button = getComponent("Button")
+    const AuthorizeBtnContainer = getComponent("AuthorizeBtnContainer", true)
     const Link = getComponent("Link")
+    const Input = getComponent("Input")
+    const ekaraSwPlaceholder = "Account Id (partner only)"
 
-    let isLoading = specSelectors.loadingStatus() === "loading"
-    let isFailed = specSelectors.loadingStatus() === "failed"
-
-    const classNames = ["download-url-input"]
-    if (isFailed) classNames.push("failed")
-    if (isLoading) classNames.push("loading")
-
-    const { urls } = getConfigs()
-    let control = []
-    let formOnSubmit = null
-
-    if(urls) {
-      let rows = []
-      urls.forEach((link, i) => {
-        rows.push(<option key={i} value={link.url}>{link.name}</option>)
-      })
-
-      control.push(
-        <label className="select-label" htmlFor="select"><span>Select a definition</span>
-          <select id="select" disabled={isLoading} onChange={ this.onUrlSelect } value={urls[this.state.selectedIndex].url}>
-            {rows}
-          </select>
-        </label>
-      )
-    }
-    else {
-      formOnSubmit = this.downloadUrl
-      control.push(<input className={classNames.join(" ")} type="text" onChange={ this.onUrlChange } value={this.state.url} disabled={isLoading} />)
-      control.push(<Button className="download-url-button" onClick={ this.downloadUrl }>Explore</Button>)
-    }
 
     return (
       <div className="topbar">
@@ -152,9 +141,13 @@ export default class Topbar extends React.Component {
             <Link>
               <img height="40" src={ Logo } alt="Swagger UI"/>
             </Link>
-            <form className="download-url-wrapper" onSubmit={formOnSubmit}>
-              {control.map((el, i) => cloneElement(el, { key: i }))}
-            </form>
+            <div className="set-token-div" style={{float: "right", marginTop: "6px"}}>
+        <Input className='input-header' type="text" placeholder={ekaraSwPlaceholder} id="input-clientId"/>
+        <AuthorizeBtnContainer />
+        <span id="token-is-set" style={{color: "greenyellow"}} hidden={this.state.hiddenTokenInfo}>Token is set</span>
+        <span id="token-is-set" hidden>Token is set</span>
+      </div>
+
           </div>
         </div>
       </div>
